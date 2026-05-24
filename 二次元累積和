@@ -1,0 +1,23 @@
+def make_rui(a,h,w):
+  rui=[[0]*w for i in range(h)]
+  rui[0][0]=a[0][0]
+  for i in range(h):
+    if i==0:
+      for j in range(1,w):
+        rui[i][j]=rui[i][j-1]+a[i][j]
+    else:
+      for j in range(w):
+        if j == 0:
+          rui[i][j]=rui[i-1][j]+a[i][j]
+        else:
+          rui[i][j]=a[i][j]-rui[i-1][j-1]+rui[i-1][j]+rui[i][j-1]
+  return rui
+def query(rui,x1,y1,x2,y2):
+  res=rui[x2][y2]
+  if x1!=0:
+    res-=rui[x1-1][y2]
+  if y1 != 0:
+    res-=rui[x2][y1-1]
+  if x1!=0 and y1!=0:
+    res+=rui[x1-1][y1-1]
+  return res

@@ -7,7 +7,7 @@ def combi(n,r,kai,MOD):
   res=1
   if n<r or r < 0:
     return 0
-  if n > len(kai):
+  if n >= len(kai):
     for i in range(n,n-r,-1):
       res*=i
       res%=MOD

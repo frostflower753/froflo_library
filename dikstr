@@ -1,0 +1,14 @@
+def dikstr(v):
+  dist=[10**18]*n
+  dist[v]=0
+  hq=[(0,v)]
+  while hq:
+    d,u=heappop(hq)
+    if dist[u] < d:
+      continue
+    for i,c in con[u]:
+      new=dist[u]+c
+      if new < dist[i]:
+        dist[i]=new
+        heappush(hq,(new,i))
+  return dist

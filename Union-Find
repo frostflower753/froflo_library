@@ -1,12 +1,13 @@
-def find(v):
+sys.setrecursionlimit(3000000)
+def find(v,par):
   if par[v]==v:
     return par[v]
   else:
     par[v]=find(par[v])
     return par[v]
-def union(u,v):
-  s=find(u)
-  t=find(v)
+def union(u,v,par):
+  s=find(u,par)
+  t=find(v,par)
   if s == t:
     return 0
   else:

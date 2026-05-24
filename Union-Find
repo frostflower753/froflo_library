@@ -1,0 +1,17 @@
+def find(v):
+  if par[v]==v:
+    return par[v]
+  else:
+    par[v]=find(par[v])
+    return par[v]
+def union(u,v):
+  s=find(u)
+  t=find(v)
+  if s == t:
+    return 0
+  else:
+    if s < t:
+      par[s]=t
+    else:
+      par[t]=s
+    return 1

@@ -1,0 +1,16 @@
+def make_kai(n,MOD):
+  kai=[1]*(n+10)
+  for i in range(1,n+10):
+    kai[i]=(kai[i-1]*i)%MOD
+  return kai
+def combi(n,r,kai,MOD):
+  res=1
+  if n<r or r < 0:
+    return 0
+  if n > len(kai):
+    for i in range(n,n-r,-1):
+      res*=i
+      res%=MOD
+    res*=pow(kai[r],-1,MOD)
+    return res
+  return (kai[n]*pow(kai[n-r],-1,MOD)*pow(kai[r],-1,MOD))%MOD

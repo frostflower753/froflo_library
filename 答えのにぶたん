@@ -1,0 +1,28 @@
+def check(v):
+  
+  
+  return
+left=0
+right=10**18
+ans=0
+while left <= right:
+  mid=(left+right)//2
+  if check(mid):
+    ans=max(ans,mid)
+    left=mid+1
+  else:
+    right=mid-1
+print(ans)
+
+
+left=0
+right=10**18
+ans=10**18
+while left <= right:
+  mif=(left+right)//2
+  if check(mid):
+    ans=min(ans,mid)
+    right=mid-1
+  else:
+    left=mid+1
+print(ans)

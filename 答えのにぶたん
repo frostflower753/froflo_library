@@ -19,7 +19,7 @@ left=0
 right=10**18
 ans=10**18
 while left <= right:
-  mif=(left+right)//2
+  mid=(left+right)//2
   if check(mid):
     ans=min(ans,mid)
     right=mid-1

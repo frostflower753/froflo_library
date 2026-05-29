@@ -1,0 +1,19 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+#sys.setrecursionlimit(3000000)
+alp = list("abcdefghijklmnopqrstuvwxyz")
+ALP = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+move = ((1,0),(-1,0),(0,1),(0,-1))
+def I(): return int(input())
+def L(): return list(map(int,input().split()))
+def M(): return map(int,input().split())
+def PY(): return print("Yes")
+def PN(): return print("No")
+
+
+def solve():
+  
+  
+  
+  
+solve()

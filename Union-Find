@@ -1,5 +1,5 @@
 sys.setrecursionlimit(3000000)
-def find():
+def find(v):
   if par[v]==v:
     return par[v]
   else:

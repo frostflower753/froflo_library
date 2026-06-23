@@ -18,6 +18,7 @@ def S(): return list(input())
 def GD(h): return [S() for i in range(h)]
 def PY(): return print("Yes")
 def PN(): return print("No")
+def PJ(x): return print("".join(x))
 INF=10**18
 
 def solve():

@@ -2,8 +2,7 @@ def update(t):#+xした状態で渡して！
   while t > 0:
     seg[t]=sum(seg[t*2],seg[t*2+1])
     t//=2
-def query(l,r):#+xして""いない""状態で渡して！半開区間！
-  res=0
+def query(l,r,res):#+xして""いない""状態で渡して！半開区間！
   while l < r:
     if l%2 == 1:
       res=sum(res,seg[l])

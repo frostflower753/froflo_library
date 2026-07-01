@@ -1,3 +1,4 @@
+seg_iv=0
 def op(x,y):#書き換えるのはここだけ！！！
   return sum(x,y)
 def update(t):#+xした状態で渡して！

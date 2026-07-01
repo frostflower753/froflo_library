@@ -13,6 +13,7 @@ def union(u,v):
   else:
     if s < t:
       par[s]=t
+      #足したりするならtにsを足す,親がtなので
     else:
       par[t]=s
     return 1

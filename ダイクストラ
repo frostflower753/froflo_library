@@ -1,4 +1,5 @@
 from heapq import heappop,heappush
+#nが頂点数,vが視点,conが辺のつながり
 def dikstr(n,v,con):
   dist=[10**18]*n
   dist[v]=0

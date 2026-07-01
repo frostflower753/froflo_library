@@ -1,17 +1,19 @@
+def op(x,y):#書き換えるのはここだけ！！！
+  return sum(x,y)
 def update(t):#+xした状態で渡して！
   while t > 0:
-    seg[t]=sum(seg[t*2],seg[t*2+1])
+    seg[t]=op(seg[t*2],seg[t*2+1])
     t//=2
 def query(l,r,res):#+xして""いない""状態で渡して！半開区間！
   l+=x
   r+=x
   while l < r:
     if l%2 == 1:
-      res=sum(res,seg[l])
+      res=op(res,seg[l])
       l+=1
     if r%2 == 1:
       r-=1
-      res=sum(res,seg[r])
+      res=op(res,seg[r])
     l//=2
     r//=2
   return res

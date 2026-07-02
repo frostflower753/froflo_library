@@ -51,10 +51,10 @@ def eval(k):                                     #k：頂点番号
   lazy[k] = lazy_iv                              #初期化
 
 def update(a,b,v,k,l,r):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
-  eval(k)
+  eval(k)                                        #とりあえず遷移
   if r <= a or b <= l:                           #完全な範囲外は見ない
     return
-  if a <= l and r <= b:                          #すっぽり入る場合
+  if a <= l and r <= b:                          #完全に含むならその頂点を更新
     lazy[k]=cp(v,lazy[k])
     eval(k)
     return
@@ -63,13 +63,13 @@ def update(a,b,v,k,l,r):                         #[a:b):更新したい範囲、
   update(a,b,v,k*2+1,mid,r)
   seg[k]=op(seg[k*2],seg[k*2+1])                 #segのデータを最新にする
 
-def query(a,b,k,l,r):
-  eval(k)
-  if r <= a or b <= l:
+def query(a,b,k,l,r):                            #[a,b):集めたいデータ範囲、k:現在の頂点、[l:r):今見てる範囲
+  eval(k)                                        #とりあえず遷移
+  if r <= a or b <= l:                           #範囲外なら影響しないものを返す
     return seg_iv
-  if a <= l and r <= b:
+  if a <= l and r <= b:                         #完全に含むならそれを返す
     return seg[k]
-  mid=(l+r)//2
+  mid=(l+r)//2                                  #半分に分けて左右で見ていく
   res_l=query(a,b,k*2,l,mid)
   res_r=query(a,b,k*2+1,mid,r)
   return op(res_l,res_r)

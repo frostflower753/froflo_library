@@ -1,0 +1,73 @@
+# ----- パターンA：【区間加算】＋【区間和取得】 -----
+# seg_iv = [0, 1]  # [値の初期値, 長さの初期値]
+# lazy_iv = 0
+# def op(x, y):          return [x[0] + y[0], x[1] + y[1]]
+# def mp(f, x):     return [x[0] + f * x[1], x[1]]
+# def cp(f, g): return f + g
+
+# ----- パターンB：【区間加算】＋【区間最大値(max)取得】 -----
+# seg_iv = [-10**18, 1] # 最小値(min)なら [10**18, 1]
+# lazy_iv = 0
+# def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
+# def mp(f, x):     return [x[0] + f, x[1]]
+# def cp(f, g): return f + g
+
+# ----- パターンC：【区間更新(上書き)】＋【区間和取得】 -----
+# seg_iv = [0, 1]
+# lazy_iv = None # 上書きされない状態を None とする
+# def op(x, y):          return [x[0] + y[0], x[1] + y[1]]
+# def mp(f, x):     return [f * x[1], x[1]] if f != lazy_iv else x
+# def cp(f, g): return f if f != lazy_iv else g
+
+# ----- パターンD：【区間更新(上書き)】＋【区間最大値(max)取得】 -----
+# seg_iv = [-10**18, 1] # 最小値(min)なら [10**18, 1] 
+# lazy_iv = None
+# def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
+# def mp(f, x):     return [f, x[1]] if f != lazy_iv else x
+# def cp(f, g): return f if f != lazy_iv else g
+
+# ----- パターンE：【区間値置き換え(上書き)】＋【区間XOR和取得】 -----
+#seg_iv = [0, 1]
+#lazy_iv = None # 上書きされない状態を None とする
+#def op(x, y):          return [x[0] ^ y[0], x[1] + y[1]]
+#def mp(f, x):     return [f if x[1] % 2 == 1 else 0, x[1]] if f != lazy_iv else x
+#def cp(f, g): return f if f != lazy_iv else g
+
+def make_seg(x):
+  seg=[seg_iv[:] for i in range(x*2)]
+  for i in range(x-1,0,-1):
+    seg[i][1]=seg[i*2][1]+seg[i*2+1][1]
+  return seg
+def make_lazy(x):
+  lazy=[lazy_iv for i in range(x*2)]
+  return lazy
+def eval(k):
+  if lazy[k]==lazy_iv:
+    return
+  if k < x:
+    lazy[k*2]=cp(lazy[k], lazy[k*2])
+    lazy[k*2+1]=cp(lazy[k], lazy[k*2+1])
+  seg[k] = mp(lazy[k], seg[k])
+  lazy[k] = lazy_iv
+def update(a,b,v,k,l,r):
+  eval(k)
+  if r <= a or b <= l:
+    return
+  if a <= l and r <= b:
+    lazy[k]=cp(v,lazy[k])
+    eval(k)
+    return
+  mid=(l+r)//2
+  update(a,b,v,k*2,l,mid)
+  update(a,b,v,k*2+1,mid,r)
+  seg[k]=op(seg[k*2],seg[k*2+1])
+def query(a,b,k,l,r):
+  eval(k)
+  if r <= a or b <= l:
+    return seg_iv
+  if a <= l and r <= b:
+    return seg[k]
+  mid=(l+r)//2
+  res_l=query(a,b,k*2,l,mid)
+  res_r=query(a,b,k*2+1,mid,r)
+  return op(res_l,res_r)

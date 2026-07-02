@@ -41,26 +41,28 @@ def make_seg(x):
 def make_lazy(x):
   lazy=[lazy_iv for i in range(x*2)]
   return lazy
-def eval(k):
-  if lazy[k]==lazy_iv:
+def eval(k):                                     #k：頂点番号
+  if lazy[k]==lazy_iv:                           #何もなければ放置
     return
-  if k < x:
+  if k < x:                                      #葉でないなら下へ遷移
     lazy[k*2]=cp(lazy[k], lazy[k*2])
     lazy[k*2+1]=cp(lazy[k], lazy[k*2+1])
-  seg[k] = mp(lazy[k], seg[k])
-  lazy[k] = lazy_iv
-def update(a,b,v,k,l,r):
+  seg[k] = mp(lazy[k], seg[k])                   #自頂点は書き換える
+  lazy[k] = lazy_iv                              #初期化
+
+def update(a,b,v,k,l,r):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
   eval(k)
-  if r <= a or b <= l:
+  if r <= a or b <= l:                           #完全な範囲外は見ない
     return
-  if a <= l and r <= b:
+  if a <= l and r <= b:                          #すっぽり入る場合
     lazy[k]=cp(v,lazy[k])
     eval(k)
     return
-  mid=(l+r)//2
+  mid=(l+r)//2                                   #左右に分けて見ていく
   update(a,b,v,k*2,l,mid)
   update(a,b,v,k*2+1,mid,r)
-  seg[k]=op(seg[k*2],seg[k*2+1])
+  seg[k]=op(seg[k*2],seg[k*2+1])                 #segのデータを最新にする
+
 def query(a,b,k,l,r):
   eval(k)
   if r <= a or b <= l:

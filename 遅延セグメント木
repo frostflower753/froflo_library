@@ -1,3 +1,25 @@
+#LCM→最小公倍数、GCD→最大公約数
+#from math import lcm,gcd,pi,isqrt
+#from collections import deque
+#from functools import cache
+#from heapq import heappop,heappush
+#from sortedcontainers import SortedList,SortedSet,SortedDict
+#import bisect
+#import itertools
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+#sys.setrecursionlimit(3000000)
+move = ((1,0),(-1,0),(0,1),(0,-1))
+def I(): return int(input())
+def L(): return list(map(int,input().split()))
+def M(): return map(int,input().split())
+def LL(n): return [L() for _ in range(n)]
+def S(): return list(input())
+def GD(h): return [S() for i in range(h)]
+def PY(): return print("Yes")
+def PN(): return print("No")
+def PJ(x): return print("".join(x))
+INF=10**18
 # ----- パターンA：【区間加算】＋【区間和取得】 -----
 # seg_iv = [0, 1]  # [値の初期値, 長さの初期値]
 # lazy_iv = 0
@@ -20,11 +42,11 @@
 # def cp(f, g): return f if f != lazy_iv else g
 
 # ----- パターンD：【区間更新(上書き)】＋【区間最大値(max)取得】 -----
-# seg_iv = [-10**18, 1] # 最小値(min)なら [10**18, 1] 
-# lazy_iv = None
-# def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
-# def mp(f, x):     return [f, x[1]] if f != lazy_iv else x
-# def cp(f, g): return f if f != lazy_iv else g
+seg_iv = [0, 1] # 最小値(min)なら [10**18, 1] 
+lazy_iv = None
+def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
+def mp(f, x):     return [f, x[1]] if f != lazy_iv else x
+def cp(f, g): return f if f != lazy_iv else g
 
 # ----- パターンE：【区間値置き換え(上書き)】＋【区間XOR和取得】 -----
 #seg_iv = [0, 1]
@@ -89,7 +111,7 @@ def query(a,b):                            #[a,b):集めたいデータ範囲、
     parr=r//(2**i)
     if parl>0:
       push(parl)
-    if parr>-:
+    if parr>0:
       push(parr)
   resl=seg_iv[:]
   resr=seg_iv[:]
@@ -103,3 +125,17 @@ def query(a,b):                            #[a,b):集めたいデータ範囲、
     l//=2
     r//=2
   return op(resl,resr)
+
+n,q=M()
+height=0
+x=1
+while x <n:
+  x*=2
+  height+=1
+seg=make_seg(x)
+lazy=make_lazy(x)
+for i in range(q):
+  l,r=M()
+  now=query(l-1,r)
+  print(now+1)
+  update(l-1,r,now+1)

@@ -78,7 +78,7 @@ def update(a,b,v):                         #[a:b):更新したい範囲、v:更�
   r=b+x
   for i in range(height,0,-1):
     parl=l//(2**i)
-    parr=r//(2**i)
+    parr=(r-1)//(2**i)
     if parl>0:
       push(parl)
     if parr>0:
@@ -97,7 +97,7 @@ def update(a,b,v):                         #[a:b):更新したい範囲、v:更�
     r//=2
   while l_co > 1:
     l_co//=2
-    seg[l_co]=op(seg[l_co*2],seg[l_co*2+1])
+    seg[l_co] = mp(lazy[l_co], op(seg[l_co*2], seg[l_co*2+1]))
   r_co-=1
   while r_co > 1:
     r_co//=2

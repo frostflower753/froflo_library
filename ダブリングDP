@@ -1,0 +1,12 @@
+def make_ruijou(x,mod)
+  ruijou=[10]
+  for i in range(x-1):
+    ruijou.append((ruijou[-1]*ruijou[-1])%mod)
+  return ruijou
+def doubling(dpi,dpj,tj,size,mod):        #dpi,dpjは使うDP、tjは大抵ruijou[i-1]
+  res=[0]*table
+  for i in range(size):
+    for j in range(size):
+        res[(i*tj+j)%size]+=dpi[i]*dpj[j]
+        res[(i*tj+j)%size]%=mod
+  return res

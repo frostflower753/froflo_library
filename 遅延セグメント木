@@ -41,35 +41,65 @@ def make_seg(x):
 def make_lazy(x):
   lazy=[lazy_iv for i in range(x*2)]
   return lazy
-def eval(k):                                     #k：頂点番号
+
+def push(k):                                     #k：頂点番号
   if lazy[k]==lazy_iv:                           #何もなければ放置
-    return
-  if k < x:                                      #葉でないなら下へ遷移
-    lazy[k*2]=cp(lazy[k], lazy[k*2])
-    lazy[k*2+1]=cp(lazy[k], lazy[k*2+1])
-  seg[k] = mp(lazy[k], seg[k])                   #自頂点は書き換える
+    return                                      
+  lazy[k*2]=cp(lazy[k], lazy[k*2])
+  lazy[k*2+1]=cp(lazy[k], lazy[k*2+1])
+  seg[k*2] = mp(lazy[k], seg[k*2]) 
+  seg[k*2+1] = mp(lazy[k], seg[k*2+1])
   lazy[k] = lazy_iv                              #初期化
 
-def update(a,b,v,k,l,r):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
-  eval(k)                                        #とりあえず遷移
-  if r <= a or b <= l:                           #完全な範囲外は見ない
-    return
-  if a <= l and r <= b:                          #完全に含むならその頂点を更新
-    lazy[k]=cp(v,lazy[k])
-    eval(k)
-    return
-  mid=(l+r)//2                                   #左右に分けて見ていく
-  update(a,b,v,k*2,l,mid)
-  update(a,b,v,k*2+1,mid,r)
-  seg[k]=op(seg[k*2],seg[k*2+1])                 #segのデータを最新にする
+def update(a,b,v):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
+  l=a+x
+  r=b+x
+  for i in range(height-1,0,-1):
+    parl=l//(2**i)
+    parr=r//(2**i)
+    if parl>0:
+      push(parl)
+    if parr>0:
+      push(parr)
+  l_co,r_co=l,r
+  while l < r:
+    if l%2==1:
+      lazy[l]=cp(v,lazy[l])
+      seg[l]=mp(v,seg[l])
+      l+=1
+    if r%2==1:
+      r-=1
+      lazy[r]=cp(v,lazy[r])
+      seg[r]=mp(v,seg[r])
+    l//=2
+    r//=2
+  while l_co > 1:
+    l_co//=2
+    seg[l_co]=op(seg[l_co*2],seg[l_co*2+1])
+  r_co-=1
+  while r_co > 1:
+    r_co//=2
+    seg[r_co]=op(seg[r_co*2],seg[r_co*2+1])
 
-def query(a,b,k,l,r):                            #[a,b):集めたいデータ範囲、k:現在の頂点、[l:r):今見てる範囲
-  eval(k)                                        #とりあえず遷移
-  if r <= a or b <= l:                           #範囲外なら影響しないものを返す
-    return seg_iv
-  if a <= l and r <= b:                         #完全に含むならそれを返す
-    return seg[k]
-  mid=(l+r)//2                                  #半分に分けて左右で見ていく
-  res_l=query(a,b,k*2,l,mid)
-  res_r=query(a,b,k*2+1,mid,r)
-  return op(res_l,res_r)
+def query(a,b):                            #[a,b):集めたいデータ範囲、k:現在の頂点、[l:r):今見てる範囲
+  l=a+x
+  r=b+x
+  for i in range(height,0,-1):
+    parl=l//(2**i)
+    parr=r//(2**i)
+    if parl>0:
+      push(parl)
+    if parr>-:
+      push(parr)
+  resl=seg_iv[:]
+  resr=seg_iv[:]
+  while l < r:
+    if l%2==1:
+      resl=op(resl,seg[l])
+      l+=1
+    if r%2 == 1:
+      r-=1
+      resr=op(resr,seg[r])
+    l//=2
+    r//=2
+  return op(resl,resr)

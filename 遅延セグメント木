@@ -73,13 +73,13 @@ def update(a,b,v):                         #[a:b):更新したい範囲、v:更�
     l//=2
     r//=2
     leng*=2
-  leng=1
+  leng=2
   while l_co > 1:
     l_co//=2
     seg[l_co] = mp(lazy[l_co], op(seg[l_co*2], seg[l_co*2+1]),leng)
     leng*=2
   r_co-=1
-  leng=1
+  leng=2
   while r_co > 1:
     r_co//=2
     seg[r_co] = mp(lazy[r_co], op(seg[r_co*2], seg[r_co*2+1]),leng)

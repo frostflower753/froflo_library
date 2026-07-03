@@ -1,85 +1,89 @@
 # ----- パターンA：【区間加算】＋【区間和取得】 -----
-# seg_iv = [0, 1]  # [値の初期値, 長さの初期値]
-# lazy_iv = 0
-# def op(x, y):          return [x[0] + y[0], x[1] + y[1]]
-# def mp(f, x):     return [x[0] + f * x[1], x[1]]
+#seg_iv = 0  # [値の初期値, 長さの初期値]
+#lazy_iv = 0
+#def op(x, y):          return x+y
+# def mp(f, x,length):     return x+f*length
 # def cp(f, g): return f + g
 
 # ----- パターンB：【区間加算】＋【区間最大値(max)取得】 -----
-# seg_iv = [-10**18, 1] # 最小値(min)なら [10**18, 1]
-# lazy_iv = 0
-# def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
-# def mp(f, x):     return [x[0] + f, x[1]]
-# def cp(f, g): return f + g
+#seg_iv = -10**18 # 最小値(min)なら [10**18, 1]
+#lazy_iv = 0
+#def op(x, y):          return max(x,y)
+#def mp(f, x,length):     return x+f*length
+#def cp(f, g): return f + g
 
 # ----- パターンC：【区間更新(上書き)】＋【区間和取得】 -----
-# seg_iv = [0, 1]
-# lazy_iv = None # 上書きされない状態を None とする
-# def op(x, y):          return [x[0] + y[0], x[1] + y[1]]
-# def mp(f, x):     return [f * x[1], x[1]] if f != lazy_iv else x
-# def cp(f, g): return f if f != lazy_iv else g
+#seg_iv = 0
+#lazy_iv = None # 上書きされない状態を None とする
+#def op(x, y):          return x+y
+#def mp(f, x,length):     return f*length if f != lazy_iv else x
+#def cp(f, g): return f if f != lazy_iv else g
 
 # ----- パターンD：【区間更新(上書き)】＋【区間最大値(max)取得】 -----
-# seg_iv = [-10**18, 1] # 最小値(min)なら [10**18, 1] 
-# lazy_iv = None
-# def op(x, y):          return [max(x[0], y[0]), x[1] + y[1]]
-# def mp(f, x):     return [f, x[1]] if f != lazy_iv else x
-# def cp(f, g): return f if f != lazy_iv else g
+#seg_iv = -10**18, 1 # 最小値(min)なら [10**18, 1] 
+#lazy_iv = None
+#def op(x, y):          return max(x,y)
+#def mp(f, x,length):     return f if f != lazy_iv else x
+#def cp(f, g): return f if f != lazy_iv else g
 
 # ----- パターンE：【区間値置き換え(上書き)】＋【区間XOR和取得】 -----
-#seg_iv = [0, 1]
+#seg_iv = 0
 #lazy_iv = None # 上書きされない状態を None とする
-#def op(x, y):          return [x[0] ^ y[0], x[1] + y[1]]
-#def mp(f, x):     return [f if x[1] % 2 == 1 else 0, x[1]] if f != lazy_iv else x
+#def op(x, y):          return x^y
+#def mp(f, x,length):     return (f if length % 2 == 1 else 0) if f != lazy_iv else x
 #def cp(f, g): return f if f != lazy_iv else g
 
 def make_seg(x):
-  seg=[seg_iv[:] for i in range(x*2)]
-  for i in range(x-1,0,-1):
-    seg[i][1]=seg[i*2][1]+seg[i*2+1][1]
+  seg=[seg_iv]*(x*2)
   return seg
 def make_lazy(x):
-  lazy=[lazy_iv for i in range(x*2)]
+  lazy=[lazy_iv]*(x*2)
   return lazy
 
-def push(k):                                     #k：頂点番号
+def push(k,i):                                     #k：頂点番号
   if lazy[k]==lazy_iv:                           #何もなければ放置
     return                                      
   lazy[k*2]=cp(lazy[k], lazy[k*2])
   lazy[k*2+1]=cp(lazy[k], lazy[k*2+1])
-  seg[k*2] = mp(lazy[k], seg[k*2]) 
-  seg[k*2+1] = mp(lazy[k], seg[k*2+1])
+  seg[k*2] = mp(lazy[k], seg[k*2],2**(i - 1)) 
+  seg[k*2+1] = mp(lazy[k], seg[k*2+1],2**(i - 1))
   lazy[k] = lazy_iv                              #初期化
 
 def update(a,b,v):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
   l=a+x
   r=b+x
-  for i in range(height-1,0,-1):
+  for i in range(height,0,-1):
     parl=l//(2**i)
     parr=(r-1)//(2**i)
     if x>parl>0:
-      push(parl)
+      push(parl,i)
     if x>parr>0:
-      push(parr)
+      push(parr,i)
   l_co,r_co=l,r
+  leng=1
   while l < r:
     if l%2==1:
       lazy[l]=cp(v,lazy[l])
-      seg[l]=mp(v,seg[l])
+      seg[l]=mp(v,seg[l],leng)
       l+=1
     if r%2==1:
       r-=1
       lazy[r]=cp(v,lazy[r])
-      seg[r]=mp(v,seg[r])
+      seg[r]=mp(v,seg[r],leng)
     l//=2
     r//=2
+    leng*=2
+  leng=1
   while l_co > 1:
     l_co//=2
-    seg[l_co] = mp(lazy[l_co], op(seg[l_co*2], seg[l_co*2+1]))
+    seg[l_co] = mp(lazy[l_co], op(seg[l_co*2], seg[l_co*2+1]),leng)
+    leng*=2
   r_co-=1
+  leng=1
   while r_co > 1:
     r_co//=2
-    seg[r_co] = mp(lazy[r_co], op(seg[r_co*2], seg[r_co*2+1]))
+    seg[r_co] = mp(lazy[r_co], op(seg[r_co*2], seg[r_co*2+1]),leng)
+    leng*=2
 
 def query(a,b):                            #[a,b):集めたいデータ範囲、k:現在の頂点、[l:r):今見てる範囲
   l=a+x
@@ -88,11 +92,11 @@ def query(a,b):                            #[a,b):集めたいデータ範囲、
     parl=l//(2**i)
     parr=(r-1)//(2**i)
     if x>parl>0:
-      push(parl)
+      push(parl,i)
     if x>parr>0:
-      push(parr)
-  resl=seg_iv[:]
-  resr=seg_iv[:]
+      push(parr,i)
+  resl=seg_iv
+  resr=seg_iv
   while l < r:
     if l%2==1:
       resl=op(resl,seg[l])

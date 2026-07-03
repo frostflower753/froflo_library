@@ -76,7 +76,7 @@ def push(k):                                     #k：頂点番号
 def update(a,b,v):                         #[a:b):更新したい範囲、v:更新する値、k:現在の頂点、[l:r):今見てる範囲
   l=a+x
   r=b+x
-  for i in range(height-1,0,-1):
+  for i in range(height,0,-1):
     parl=l//(2**i)
     parr=r//(2**i)
     if parl>0:
@@ -121,7 +121,7 @@ def query(a,b):                            #[a,b):集めたいデータ範囲、
       l+=1
     if r%2 == 1:
       r-=1
-      resr=op(resr,seg[r])
+      resr=op(seg[r],resr)
     l//=2
     r//=2
   return op(resl,resr)

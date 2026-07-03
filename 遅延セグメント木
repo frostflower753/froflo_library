@@ -108,7 +108,7 @@ def query(a,b):                            #[a,b):集めたいデータ範囲、
   r=b+x
   for i in range(height,0,-1):
     parl=l//(2**i)
-    parr=r//(2**i)
+    parr=(r-1)//(2**i)
     if parl>0:
       push(parl)
     if parr>0:

@@ -1,0 +1,30 @@
+n,k =M()
+num_states =2**n
+INF = 10**30
+cost = [0] * num_states
+for mask in range(num_states):
+  # ここに問題に応じた「1つのグループのコスト」を計算して入れる
+  # 例: 距離の最大値、重さの合計、条件を満たすか(0/1) など
+dp = [[INF] * (K + 1) for _ in range(num_states)]#グループ制限なしなら1次元
+dp[0][0] = 0
+bitcou = [[] for _ in range(N + 1)]
+for i in range(num_states):
+  bitcou[i.bit_count()].append(i)
+    for cou in range(1, N + 1):
+      max_cnt = min(cou, K)
+        for s in bitcou[cou]:
+          v = (s & -s).bit_length() - 1
+          u = s
+          while u > 0:
+            if (u >> v) & 1:
+              x = u ^ s
+              for cnt in range(1, max_cnt + 1):
+                if dp[x][cnt - 1] != INF:
+                  cand = max(dp[x][cnt - 1], cost[u])
+                  if cand < dp[s][cnt]:
+                    dp[s][cnt] = cand
+            u = (u - 1) & s
+ans=INF
+for i in range(1,k+1):
+  ans=min(ans,dp[-1][i])
+print(ans)

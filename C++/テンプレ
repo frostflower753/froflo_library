@@ -16,7 +16,6 @@ template<typename T> std::istream &operator>>(std::istream&is,vc<T>&v){for(T &in
 template<typename T> std::ostream &operator<<(std::ostream&os,const vc<T>&v){for(auto it=std::begin(v);it!=std::end(v);){os<<*it<<((++it)!=std::end(v)?" ":"");}return os;}
 
 // --- Pythonのテンプレ関数を完全再現 ---
-// --- Pythonのテンプレ関数を完全再現 ---
 #define I() [](){ ll x; cin >> x; return x; }()
 #define L(v, n) vc<ll> v(n); cin >> v
 #define LL1(v, h, w) vvc<ll> v(h, vc<ll>(w)); cin >> v
@@ -29,6 +28,7 @@ template<typename T> std::ostream &operator<<(std::ostream&os,const vc<T>&v){for
 // --- ループと更新、便利関数 ---
 #define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
 #define ALL(x) x.begin(),x.end()
+#define rALL(x) x.rbegin(),x.rend()
 template<class... T> constexpr auto min_v(T... a){return min({a...});}
 template<class... T> constexpr auto max_v(T... a){return max({a...});}
 template<typename T, typename U> inline bool chmax(T& a, U b) { if (a < b) { a = b; return 1; } return 0; }
@@ -40,5 +40,11 @@ constexpr ll modpow(ll b, ll e, ll m = 998244353) { b %= m; if (b < 0) b += m; l
 constexpr ll modinv(ll b, ll m = 998244353) { return modpow(b, m - 2, m); }
 
 int main(){
-
+  
+  
+  
+  
+  
+  
+  
 }

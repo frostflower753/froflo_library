@@ -33,6 +33,8 @@ template<class... T> constexpr auto min_v(T... a){return min({a...});}
 template<class... T> constexpr auto max_v(T... a){return max({a...});}
 template<typename T, typename U> inline bool chmax(T& a, U b) { if (a < b) { a = b; return 1; } return 0; }
 template<typename T, typename U> inline bool chmin(T& a, U b) { if (a > b) { a = b; return 1; } return 0; }
+template<class It, class T> ll lower_idx(It f, It l, const T& x){ return lower_bound(f,l,x)-f; }
+template<class It, class T> ll upper_idx(It f, It l, const T& x){ return upper_bound(f,l,x)-f; }
 
 // --- 数学系（累乗・逆元） ---
 constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }

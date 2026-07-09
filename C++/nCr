@@ -1,0 +1,31 @@
+vector<ll> make_kai(ll n,ll mod){
+  vector<ll> kai(n,0);
+  kai[0]=1;
+  kai[1]=1;
+  for(int i=2;i<n;i++){
+    kai[i]=kai[i-1]*i;
+    kai[i]%=mod;
+    if(kai[i]<0){
+      kai[i]+=mod;
+    }
+  }
+  return kai;
+}
+
+vector<ll> make_invkai(ll n,ll mod,vector<ll>& kai){
+  vector<ll> invkai(n,0);
+  invkai[0]=1;
+  for(ll i=1;i<n;i++){
+    invkai[i]=modinv(kai[i],mod);
+  }
+  return invkai;
+}
+
+ll combi(ll n,ll r,ll mod,vector<ll>& kai,vector<ll>& invkai){
+  if(n<r){
+    return 0;
+  }
+  ll res=(__int128)kai[n]*invkai[n-r]%mod;
+  res = (__int128)res *invkai[r] % mod;
+  return res;
+}

@@ -1,7 +1,7 @@
 // 1. 要素の型 S と、区間の統合 op, 初期値 e
 using S = ll;
-S op(S a, S b) { return max(a, b); } // 区間の「最大値」を取る
-S e() { return 0; }                  // 初期状態の高さは 0
+S op(S a, S b) { return max(a, b); }
+S e() { return 0; }
 
 // 2. 更新操作の型 F と、操作の適用 mapping, 操作の合成 composition, 未操作の目印 id
 using F = ll;
@@ -9,12 +9,12 @@ const F ID = -1; // 何も操作しない状態の目印（恒等写像）
 
 S mapping(F f, S x) {
     if (f == ID) return x; // 更新命令がなければそのまま
-    return f;              // あれば新しい高さ f に上書き
+    return f;              // あれば更新する
 }
 
 F composition(F f, F g) {
     if (f == ID) return g; // 新しい命令がなければ古い命令 g のまま
-    return f;              // 新しい命令 f が来たら完全に上書き
+    return f;              // 新しい命令がきたら更新
 }
 
 F id() { return ID; }

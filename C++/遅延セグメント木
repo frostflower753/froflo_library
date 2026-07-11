@@ -23,4 +23,13 @@ F id() { return ID; }
 
 //セグ木構築
 lazy_segtree<S, op, e, F, mapping, composition, id> seg(n);
-lazy_segtree<S, op, e, F, mapping, composition, id> seg(vector<T> v);
+
+
+lazy_segtree<S, op, e, F, mapping, composition, id> seg(vector<S> v);
+
+
+vector<S> init_v(max_s+1);
+rep(s,max_s+1){
+　init_v[s]={0,s};
+}
+lazy_segtree<S,op,e,F,mapping,composition,id> seg(init_v);

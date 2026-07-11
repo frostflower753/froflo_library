@@ -42,7 +42,7 @@ constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *
 constexpr ll modpow(ll b, ll e, ll m = 998244353) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
 constexpr ll modinv(ll b, ll m = 998244353) { return modpow(b, m - 2, m); }
 double pi=3.14159265358979323846264338;
-ll INF=ipow(10,18)*8;
+ll INF=ipow(10,18);
 
 
 int main(){

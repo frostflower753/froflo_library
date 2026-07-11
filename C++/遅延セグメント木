@@ -22,5 +22,5 @@ F id() { return ID; }
 
 
 //セグ木構築
-lazy_segtree<S, op, e, F, mapping, composition, id> seg(w + 1);
+lazy_segtree<S, op, e, F, mapping, composition, id> seg(n);
 lazy_segtree<S, op, e, F, mapping, composition, id> seg(vector<T> v);

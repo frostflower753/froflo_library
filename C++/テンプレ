@@ -1,5 +1,4 @@
 //GCDが最大公約数でLCMが最小公倍数
-//((i>>j)&1)で整数iに2**jのビットが立っているか確認できる
 #include <bits/stdc++.h>
 #include <atcoder/all>
 using namespace std; using namespace atcoder;
@@ -23,8 +22,6 @@ template<typename T> std::ostream &operator<<(std::ostream&os,const vc<T>&v){for
 #define LL1(v, h, w) vvc<ll> v(h, vc<ll>(w)); cin >> v
 #define S(v) [](){ str t; cin >> t; vc<char> v(t.begin(), t.end()); return v; }()
 #define GD(v, h) [](){ vvc<char> v(h); rep(i, h) { str t; cin >> t; v[i] = vc<char>(t.begin(), t.end()); } return v; }()
-#define PY() cout << "Yes\n"
-#define PN() cout << "No\n"
 
 // --- ループと更新、便利関数 ---
 #define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
@@ -34,15 +31,21 @@ template<typename T, typename U> inline bool chmax(T& a, U b) { if (a < b) { a =
 template<typename T, typename U> inline bool chmin(T& a, U b) { if (a > b) { a = b; return 1; } return 0; }
 template<class It, class T> ll lower_idx(It f, It l, const T& x){ return lower_bound(f,l,x)-f; }
 template<class It, class T> ll upper_idx(It f, It l, const T& x){ return upper_bound(f,l,x)-f; }
-template<class... T> constexpr auto max_v(T... a) { using CT = std::common_type_t<T...>; return std::max({static_cast<CT>(a)...}); }
-template<class... T> constexpr auto min_v(T... a) { using CT = std::common_type_t<T...>; return std::min({static_cast<CT>(a)...}); }
+template<class... T> constexpr auto max_ll(T... a) { using CT = std::common_type_t<T...>; return std::max({static_cast<CT>(a)...}); }
+template<class... T> constexpr auto min_ll(T... a) { using CT = std::common_type_t<T...>; return std::min({static_cast<CT>(a)...}); }
+template<typename T> T sum_v(const vector<T>& v) { return accumulate(v.begin(), v.end(), T(0)); }
+template<typename T> T min_v(const vector<T>& v) { return *min_element(v.begin(), v.end()); }
+template<typename T> T max_v(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
 template<typename T> typename T::value_type& py_at(T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
 template<typename T> const typename T::value_type& py_at(const T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
+constexpr bool bit(long long i, int j) { return (i >> j) & 1; }
 
 // --- 数学系（累乗・逆元） ---
 constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }
 constexpr ll modpow(ll b, ll e, ll m = 998244353) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
 constexpr ll modinv(ll b, ll m = 998244353) { return modpow(b, m - 2, m); }
+template<typename T> T gcd_v(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
+template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 double pi=3.14159265358979323846264338;
 ll INF=ipow(10,18);
 

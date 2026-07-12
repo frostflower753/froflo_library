@@ -1,3 +1,5 @@
+//GCDが最大公約数でLCMが最小公倍数
+//((i>>j)&1)で整数iに2**jのビットが立っているか確認できる
 #include <bits/stdc++.h>
 #include <atcoder/all>
 using namespace std; using namespace atcoder;

@@ -1,3 +1,4 @@
+//これをただmain関数の外にそのままコピペして普通に使えばいい
 vector<ll> dijkstra(ll n,ll v,vector<vector<pair<ll,ll>>> con){
   vector<ll> dist(n,ipow(10,18));
   dist[v]=0;

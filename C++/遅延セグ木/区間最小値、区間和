@@ -1,0 +1,45 @@
+// =========================================================
+// ③ 区間加算 × 区間最小値
+// =========================================================
+// 1. 要素の型 S と、区間の統合 op, 初期値 e
+using S = ll;
+
+S op(S a, S b) {
+    return min(a, b);
+}
+
+S e() {
+    return INF; // 十分大きい値
+}
+
+// 2. 更新操作の型 F と、操作の適用 mapping, 操作の合成 composition, 未操作の目印 id
+using F = ll;
+const F ID = 0; // 何も操作しない状態の目印（恒等写像）
+
+S mapping(F f, S x) {
+    if (f == ID) return x; // 更新命令がなければそのまま
+    if (x == INF) return INF;
+    return x + f;          // 最小値に f を加算
+}
+
+F composition(F f, F g) {
+    if (f == ID) return g; // 新しい命令がなければ古い命令 g のまま
+    return f + g;          // 新しい命令がきたら加算を合成
+}
+
+F id() { return ID; }
+
+/*
+[操作例]
+・初期化
+  lazy_segtree<S, op, e, F, mapping, composition, id> seg(n); // 初期値 0
+
+・区間 [l, r) に +x 加算
+  seg.apply(l, r, x);
+
+・区間 [l, r) の最小値を取得
+  ll res = seg.prod(l, r);
+
+・1点 p の現在の値を取得
+  ll val = seg.get(p);
+*/

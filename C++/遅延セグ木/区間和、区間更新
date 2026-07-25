@@ -1,0 +1,51 @@
+// =========================================================
+// ④ 区間更新 × 区間和
+// =========================================================
+// 1. 要素の型 S と、区間の統合 op, 初期値 e
+struct S {
+    ll value;
+    ll size;
+};
+
+S op(S a, S b) {
+    return {a.value + b.value, a.size + b.size};
+}
+
+S e() {
+    return {0, 0};
+}
+
+// 2. 更新操作の型 F と、操作の適用 mapping, 操作の合成 composition, 未操作の目印 id
+using F = ll;
+const F ID = INF; // 未更新を表す目印（0に変更するクエリに対応するためINF）
+
+S mapping(F f, S x) {
+    if (f == ID) return x; // 更新命令がなければそのまま
+    return {f * x.size, x.size}; // 全体を f に書き換え
+}
+
+F composition(F f, F g) {
+    if (f == ID) return g; // 新しい命令がなければ古い命令 g のまま
+    return f;              // 新しい命令がきたら上書き
+}
+
+F id() { return ID; }
+
+/*
+[操作例]
+・初期化
+  vc<S> init_v(n, {0, 1}); // 値 0, size 1 で初期化
+  lazy_segtree<S, op, e, F, mapping, composition, id> seg(init_v);
+
+・区間 [l, r) の値をすべて x に更新
+  seg.apply(l, r, x);
+
+・1点 p の値を x に更新
+  seg.apply(p, p + 1, x);
+
+・区間 [l, r) の和を取得
+  ll res = seg.prod(l, r).value;
+
+・1点 p の現在の値を取得
+  ll val = seg.get(p).value;
+*/

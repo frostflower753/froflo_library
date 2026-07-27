@@ -1,11 +1,13 @@
 //GCDが最大公約数でLCMが最小公倍数
 #include <bits/stdc++.h>
 #include <atcoder/all>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace std; using namespace atcoder;
 struct FastIO { FastIO() { cin.tie(nullptr); ios::sync_with_stdio(false); cout << fixed << setprecision(15); } } fast_io;
 
 // --- 型の短縮（Pythonの感覚に近く） ---
-using ll = long long; using ld = long double; using str = string; using ull= unsigned long long;
+using ll = long long; using ld = long double; using str = string; using ull= unsigned long long;using bigint = boost::multiprecision::cpp_int;using bigfloat = boost::multiprecision::cpp_dec_float_50;
 template<class T> using vc = vector<T>; template<class T> using vvc = vector<vector<T>>;
 using pll = pair<ll, ll>; using tll = tuple<ll, ll, ll>;
 
@@ -27,6 +29,12 @@ template<typename T> std::ostream &operator<<(std::ostream&os,const vc<T>&v){for
 #define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
 #define ALL(x) x.begin(),x.end()
 #define rALL(x) x.rbegin(),x.rend()
+#define CY() cout << "Yes\n"
+#define CN() cout << "No\n"
+template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
+#define CJ(x) cout_join(x)
+#define pb(x) push_back(x)
+#define pf(x) push_front(x)
 template<typename T, typename U> inline bool chmax(T& a, U b) { if (a < b) { a = b; return 1; } return 0; }
 template<typename T, typename U> inline bool chmin(T& a, U b) { if (a > b) { a = b; return 1; } return 0; }
 template<class It, class T> ll lower_idx(It f, It l, const T& x){ return lower_bound(f,l,x)-f; }
@@ -42,13 +50,14 @@ constexpr bool bit(long long i, int j) { return (i >> j) & 1; }
 
 // --- 数学系（累乗・逆元） ---
 constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }
-constexpr ll modpow(ll b, ll e, ll m = 998244353) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
-constexpr ll modinv(ll b, ll m = 998244353) { return modpow(b, m - 2, m); }
+constexpr ll modpow(ll b, ll e, ll m) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
+constexpr ll modinv(ll b, ll m) { return modpow(b, m - 2, m); }
 template<typename T> T gcd_v(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
 template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 double pi=3.14159265358979323846264338;
 ll INF=ipow(10,18);
-
+//ll mod=998244353;
+//ll mod=1000000007;
 
 int main(){
   
@@ -57,5 +66,9 @@ int main(){
   
   
   
+
+
+
+
   
 }

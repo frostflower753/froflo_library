@@ -1,0 +1,58 @@
+// --- N次元累積和（2次元〜高次元対応） ---
+template<typename T = long long>
+struct NDimCumSum {
+    int n;
+    vc<int> dim, stride;
+    vc<T> sum;
+
+    // dims: 各次元のサイズ (例: 3次元なら {D1, D2, D3})
+    NDimCumSum(const vc<int>& dims) : n(dims.size()), dim(dims), stride(dims.size() + 1, 1) {
+        rrep(i, n) stride[i] = stride[i + 1] * dim[i];
+        sum.assign(stride[0], 0);
+    }
+
+    // 0-indexed 座標 p に値を加算（初期値のセット）
+    void add(const vc<int>& p, T val) {
+        int idx = 0;
+        rep(i, n) idx += p[i] * stride[i + 1];
+        sum[idx] += val;
+    }
+
+    // 前処理（累積和の構築: O(N * 全要素数)）
+    void build() {
+        rep(d, n) {
+            rep(i, stride[0]) {
+                if ((i / stride[d + 1]) % dim[d] + 1 < dim[d]) {
+                    sum[i + stride[d + 1]] += sum[i];
+                }
+            }
+        }
+    }
+
+    // 閉区間 [L, R] の超長方形領域の総和を計算 (O(2^N))
+    T query(const vc<int>& L, const vc<int>& R) const {
+        T res = 0;
+        rep(mask, 1 << n) { // 包除原理
+            int idx = 0;
+            int sub_cnt = 0;
+            bool valid = true;
+            rep(i, n) {
+                int p = (mask >> i & 1) ? L[i] - 1 : R[i];
+                if (p < 0) { valid = false; break; }
+                idx += p * stride[i + 1];
+                if (mask >> i & 1) sub_cnt++;
+            }
+            if (!valid) continue;
+            res += (sub_cnt % 2 ? -sum[idx] : sum[idx]);
+        }
+        return res;
+    }
+};
+
+
+
+
+//NDimCumSum<ll> リスト名({x,y,z});//初期化
+//リスト名.build()で累積和を作る
+//リスト名.add(x,s)でxにsを加算する
+//リスト名.query(x,y)でx以上y以下の値の合計を得る

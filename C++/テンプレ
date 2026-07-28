@@ -64,52 +64,6 @@ template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r =
 
 // --- ライブラリ領域 ---
 
-// N次元累積和（ALL long long 対応版）
-template<typename T = long long>
-struct NDimCumSum {
-    ll n;
-    vc<ll> dim, stride;
-    vc<T> sum;
-
-    NDimCumSum(const vc<ll>& dims) : n(dims.size()), dim(dims), stride(dims.size() + 1, 1) {
-        rrep(i, n) stride[i] = stride[i + 1] * dim[i];
-        sum.assign(stride[0], 0);
-    }
-
-    void add(const vc<ll>& p, T val) {
-        ll idx = 0;
-        rep(i, n) idx += p[i] * stride[i + 1];
-        sum[idx] += val;
-    }
-
-    void build() {
-        rep(d, n) {
-            rep(i, stride[0]) {
-                if ((i / stride[d + 1]) % dim[d] + 1 < dim[d]) {
-                    sum[i + stride[d + 1]] += sum[i];
-                }
-            }
-        }
-    }
-
-    T query(const vc<ll>& L, const vc<ll>& R) const {
-        T res = 0;
-        rep(mask, 1LL << n) {
-            ll idx = 0;
-            ll sub_cnt = 0;
-            bool valid = true;
-            rep(i, n) {
-                ll p = (mask >> i & 1) ? L[i] - 1 : R[i];
-                if (p < 0) { valid = false; break; }
-                idx += p * stride[i + 1];
-                if (mask >> i & 1) sub_cnt++;
-            }
-            if (!valid) continue;
-            res += (sub_cnt % 2 ? -sum[idx] : sum[idx]);
-        }
-        return res;
-    }
-};
 
 // --- デバッグ & 定数 ---
 #ifdef LOCAL
@@ -127,5 +81,14 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }

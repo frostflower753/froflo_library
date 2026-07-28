@@ -1,0 +1,25 @@
+// S のローリングハッシュ（累積和）配列を構築する
+// hash_p[i] : 0-indexed で i-1 番目までの文字列のハッシュ値 (hash_p[0] = 0)
+vc<ll> build_rolling_hash(const str& s, ll base, ll mod, vc<ll>& pow_b) {
+    int n = s.size();
+    vc<ll> hash_p(n + 1, 0);
+    pow_b.assign(n + 1, 1);
+
+    rep(i, n) {
+        hash_p[i + 1] = (__int128)(hash_p[i] * base + s[i]) % mod;
+        pow_b[i + 1] = (__int128)(pow_b[i] * base) % mod;
+    }
+    return hash_p;
+}
+
+// 0-indexed の【閉区間 [l, r]】(l 番目から r 番目まで) の部分文字列のハッシュ値を取得
+// 例: S = "atcoder" のとき
+//   S[0] ~ S[2] ("atc") を取得したい場合 -> get_hash(0, 2, ...)
+//   S[1] ~ S[1] ("t")   を取得したい場合 -> get_hash(1, 1, ...)
+ll get_hash(int l, int r, const vc<ll>& hash_p, const vc<ll>& pow_b, ll mod) {
+    // r 番目までの累積は hash_p[r + 1]
+    // l 番目直前(l-1 番目)までの累積は hash_p[l]
+    ll res = (hash_p[r + 1] - (__int128)hash_p[l] * pow_b[r - l + 1]) % mod;
+    if (res < 0) res += mod;
+    return res;
+}

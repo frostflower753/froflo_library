@@ -6,39 +6,41 @@
 using namespace std; using namespace atcoder;
 struct FastIO { FastIO() { cin.tie(nullptr); ios::sync_with_stdio(false); cout << fixed << setprecision(15); } } fast_io;
 
-// --- 型の短縮（Pythonの感覚に近く） ---
-using ll = long long; using ld = long double; using str = string; using ull= unsigned long long;using bigint = boost::multiprecision::cpp_int;using bigfloat = boost::multiprecision::cpp_dec_float_50;
+// --- 型定義 ---
+using ll = long long; using ld = long double; using str = string; using ull = unsigned long long;
+using bigint = boost::multiprecision::cpp_int; using bigfloat = boost::multiprecision::cpp_dec_float_50;
 template<class T> using vc = vector<T>; template<class T> using vvc = vector<vector<T>>;
 using pll = pair<ll, ll>; using tll = tuple<ll, ll, ll>;
 
-// --- 入出力の自動化・ショートカット（最重要） ---
-template<class... T> void scan(T&... a) { (cin >> ... >> a); }
-#define LL(...) ll __VA_ARGS__; scan(__VA_ARGS__)
-#define STR(...) str __VA_ARGS__; scan(__VA_ARGS__)
-template<typename T> std::istream &operator>>(std::istream&is,vc<T>&v){for(T &in:v){is>>in;}return is;}
-template<typename T> std::ostream &operator<<(std::ostream&os,const vc<T>&v){for(auto it=std::begin(v);it!=std::end(v);){os<<*it<<((++it)!=std::end(v)?" ":"");}return os;}
+// --- 入出力（vectorのcin/cout自動化） ---
+template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
+template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
 
-// --- Pythonのテンプレ関数を完全再現 ---
-#define I() [](){ ll x; cin >> x; return x; }()
-#define L(v, n) vc<ll> v(n); cin >> v
-#define LL1(v, h, w) vvc<ll> v(h, vc<ll>(w)); cin >> v
-#define S(v) [](){ str t; cin >> t; vc<char> v(t.begin(), t.end()); return v; }()
-#define GD(v, h) [](){ vvc<char> v(h); rep(i, h) { str t; cin >> t; v[i] = vc<char>(t.begin(), t.end()); } return v; }()
+// --- ループマクロ (rep, rrep の2種に統一・ステップ数対応) ---
+#define OVERLOAD4(_1, _2, _3, _4, NAME, ...) NAME
+#define rep1(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define rep2(i, l, r) for (ll i = (ll)(l); i < (ll)(r); i++)
+#define rep3(i, l, r, s) for (ll i = (ll)(l); i < (ll)(r); i += (ll)(s))
+#define rep(...) OVERLOAD4(__VA_ARGS__, rep3, rep2, rep1)(__VA_ARGS__)
 
-// --- ループと更新、便利関数 ---
-#define rep(i, n) for (ll i = 0; i < (ll)(n); i++)
-#define ALL(x) x.begin(),x.end()
-#define rALL(x) x.rbegin(),x.rend()
+#define rrep1(i, n) for (ll i = (ll)(n) - 1; i >= 0; i--)
+#define rrep2(i, l, r) for (ll i = (ll)(r) - 1; i >= (ll)(l); i--)
+#define rrep3(i, l, r, s) for (ll i = (ll)(r) - 1; i >= (ll)(l); i -= (ll)(s))
+#define rrep(...) OVERLOAD4(__VA_ARGS__, rrep3, rrep2, rrep1)(__VA_ARGS__)
+
+#define ALL(x) (x).begin(), (x).end()
+#define rALL(x) (x).rbegin(), (x).rend()
+
+// --- 便利マクロ・関数 ---
 #define CY() cout << "Yes\n"
 #define CN() cout << "No\n"
-template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
-#define CJ(x) cout_join(x)
 #define pb(x) push_back(x)
-#define pf(x) push_front(x)
-template<typename T, typename U> inline bool chmax(T& a, U b) { if (a < b) { a = b; return 1; } return 0; }
-template<typename T, typename U> inline bool chmin(T& a, U b) { if (a > b) { a = b; return 1; } return 0; }
-template<class It, class T> ll lower_idx(It f, It l, const T& x){ return lower_bound(f,l,x)-f; }
-template<class It, class T> ll upper_idx(It f, It l, const T& x){ return upper_bound(f,l,x)-f; }
+#define pf() pop_front()
+#define CJ(x) cout_join(x)
+
+template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
+template<class It, class T> ll lower_idx(It f, It l, const T& x) { return lower_bound(f, l, x) - f; }
+template<class It, class T> ll upper_idx(It f, It l, const T& x) { return upper_bound(f, l, x) - f; }
 template<class... T> constexpr auto max_ll(T... a) { using CT = std::common_type_t<T...>; return std::max({static_cast<CT>(a)...}); }
 template<class... T> constexpr auto min_ll(T... a) { using CT = std::common_type_t<T...>; return std::min({static_cast<CT>(a)...}); }
 template<typename T> T sum_v(const vector<T>& v) { return accumulate(v.begin(), v.end(), T(0)); }
@@ -48,27 +50,31 @@ template<typename T> typename T::value_type& py_at(T& v, long long i) { long lon
 template<typename T> const typename T::value_type& py_at(const T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
 constexpr bool bit(long long i, int j) { return (i >> j) & 1; }
 
-// --- 数学系（累乗・逆元） ---
+// --- 便利テクニック（多次元配列・座圧） ---
+template<class T> T vvvc(T v) { return v; }
+template<class T, class... A> auto vvvc(int n, T v, A... a) { return vector(n, vvvc(v, a...)); }
+template<class S> void mkuni(S& v) { sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); }
+
+// --- 数学系 ---
 constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }
 constexpr ll modpow(ll b, ll e, ll m) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
 constexpr ll modinv(ll b, ll m) { return modpow(b, m - 2, m); }
 template<typename T> T gcd_v(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
 template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
-double pi=3.14159265358979323846264338;
-ll INF=ipow(10,18);
-//ll mod=998244353;
-//ll mod=1000000007;
 
-int main(){
-  
-  
-  
-  
-  
-  
+// --- デバッグ & 定数 ---
+#ifdef LOCAL
+#define dmp(...) dmpr(cerr, __LINE__, ##__VA_ARGS__)
+#else
+#define dmp(...) void(0)
+#endif
+template<class t, class u> ostream& operator<<(ostream& os, const pair<t, u>& p) { return os << "{" << p.first << "," << p.second << "}"; }
+template<class t> ostream& operator<<(ostream& os, const vector<t>& v) { os << "{"; rep(i, v.size()) os << v[i] << (i + 1 == (int)v.size() ? "" : ","); return os << "}"; }
+void dmpr(ostream& os, int l) { os << endl; }
+template<class T, class... A> void dmpr(ostream& os, int l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
+double pi = 3.14159265358979323846264338;
+constexpr ll INF = 2e18;
 
-
-
-
-  
+int main() {
+    
 }

@@ -1,4 +1,4 @@
-//GCDが最大公約数でLCMが最小公倍数
+// GCD: 最大公約数 / LCM: 最小公倍数
 #include <bits/stdc++.h>
 #include <atcoder/all>
 #include <boost/multiprecision/cpp_int.hpp>
@@ -11,10 +11,6 @@ using ll = long long; using ld = long double; using str = string; using ull = un
 using bigint = boost::multiprecision::cpp_int; using bigfloat = boost::multiprecision::cpp_dec_float_50;
 template<class T> using vc = vector<T>; template<class T> using vvc = vector<vector<T>>;
 using pll = pair<ll, ll>; using tll = tuple<ll, ll, ll>;
-
-// --- 入出力（vectorのcin/cout自動化） ---
-template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
-template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
 
 // --- ループマクロ (rep, rrep の2種に統一・ステップ数対応) ---
 #define OVERLOAD4(_1, _2, _3, _4, NAME, ...) NAME
@@ -30,6 +26,10 @@ template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) 
 
 #define ALL(x) (x).begin(), (x).end()
 #define rALL(x) (x).rbegin(), (x).rend()
+
+// --- 入出力（vectorのcin/cout自動化） ---
+template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
+template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
 
 // --- 便利マクロ・関数 ---
 #define CY() cout << "Yes\n"
@@ -48,11 +48,11 @@ template<typename T> T min_v(const vector<T>& v) { return *min_element(v.begin()
 template<typename T> T max_v(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
 template<typename T> typename T::value_type& py_at(T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
 template<typename T> const typename T::value_type& py_at(const T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
-constexpr bool bit(long long i, int j) { return (i >> j) & 1; }
+constexpr bool bit(long long i, long long j) { return (i >> j) & 1; }
 
 // --- 便利テクニック（多次元配列・座圧） ---
 template<class T> T vvvc(T v) { return v; }
-template<class T, class... A> auto vvvc(int n, T v, A... a) { return vector(n, vvvc(v, a...)); }
+template<class T, class... A> auto vvvc(ll n, T v, A... a) { return vector(n, vvvc(v, a...)); }
 template<class S> void mkuni(S& v) { sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); }
 
 // --- 数学系 ---
@@ -62,6 +62,55 @@ constexpr ll modinv(ll b, ll m) { return modpow(b, m - 2, m); }
 template<typename T> T gcd_v(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
 template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 
+// --- ライブラリ領域 ---
+
+// N次元累積和（ALL long long 対応版）
+template<typename T = long long>
+struct NDimCumSum {
+    ll n;
+    vc<ll> dim, stride;
+    vc<T> sum;
+
+    NDimCumSum(const vc<ll>& dims) : n(dims.size()), dim(dims), stride(dims.size() + 1, 1) {
+        rrep(i, n) stride[i] = stride[i + 1] * dim[i];
+        sum.assign(stride[0], 0);
+    }
+
+    void add(const vc<ll>& p, T val) {
+        ll idx = 0;
+        rep(i, n) idx += p[i] * stride[i + 1];
+        sum[idx] += val;
+    }
+
+    void build() {
+        rep(d, n) {
+            rep(i, stride[0]) {
+                if ((i / stride[d + 1]) % dim[d] + 1 < dim[d]) {
+                    sum[i + stride[d + 1]] += sum[i];
+                }
+            }
+        }
+    }
+
+    T query(const vc<ll>& L, const vc<ll>& R) const {
+        T res = 0;
+        rep(mask, 1LL << n) {
+            ll idx = 0;
+            ll sub_cnt = 0;
+            bool valid = true;
+            rep(i, n) {
+                ll p = (mask >> i & 1) ? L[i] - 1 : R[i];
+                if (p < 0) { valid = false; break; }
+                idx += p * stride[i + 1];
+                if (mask >> i & 1) sub_cnt++;
+            }
+            if (!valid) continue;
+            res += (sub_cnt % 2 ? -sum[idx] : sum[idx]);
+        }
+        return res;
+    }
+};
+
 // --- デバッグ & 定数 ---
 #ifdef LOCAL
 #define dmp(...) dmpr(cerr, __LINE__, ##__VA_ARGS__)
@@ -69,12 +118,12 @@ template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r =
 #define dmp(...) void(0)
 #endif
 template<class t, class u> ostream& operator<<(ostream& os, const pair<t, u>& p) { return os << "{" << p.first << "," << p.second << "}"; }
-template<class t> ostream& operator<<(ostream& os, const vector<t>& v) { os << "{"; rep(i, v.size()) os << v[i] << (i + 1 == (int)v.size() ? "" : ","); return os << "}"; }
-void dmpr(ostream& os, int l) { os << endl; }
-template<class T, class... A> void dmpr(ostream& os, int l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
-const vc<int> dx = {1, 0, -1, 0};
-const vc<int> dy = {0, 1, 0, -1};
-double pi = 3.14159265358979323846264338;
+void dmpr(ostream& os, ll l) { os << endl; }
+template<class T, class... A> void dmpr(ostream& os, ll l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
+
+const vc<ll> dx = {1, 0, -1, 0};
+const vc<ll> dy = {0, 1, 0, -1};
+const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {

@@ -72,6 +72,8 @@ template<class t, class u> ostream& operator<<(ostream& os, const pair<t, u>& p)
 template<class t> ostream& operator<<(ostream& os, const vector<t>& v) { os << "{"; rep(i, v.size()) os << v[i] << (i + 1 == (int)v.size() ? "" : ","); return os << "}"; }
 void dmpr(ostream& os, int l) { os << endl; }
 template<class T, class... A> void dmpr(ostream& os, int l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
+const vc<int> dx = {1, 0, -1, 0};
+const vc<int> dy = {0, 1, 0, -1};
 double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 

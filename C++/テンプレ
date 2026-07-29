@@ -37,7 +37,7 @@ template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) 
 #define No cout << "No\n"
 #define pb(x) push_back(x)
 #define pf() pop_front()
-#define CJ(x) cout_join(x)
+#define CJ cout_join
 #define mp make_pair
 #define fir first
 #define sec second

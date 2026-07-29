@@ -1,4 +1,5 @@
 // GCD: 最大公約数 / LCM: 最小公倍数
+//lower_bound:「x以上」 / upper_bound:「x超過」
 #include <bits/stdc++.h>
 #include <atcoder/all>
 #include <boost/multiprecision/cpp_int.hpp>
@@ -32,22 +33,43 @@ template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for 
 template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
 
 // --- 便利マクロ・関数 ---
-#define CY() cout << "Yes\n"
-#define CN() cout << "No\n"
+#define Yes cout << "Yes\n"
+#define No cout << "No\n"
 #define pb(x) push_back(x)
 #define pf() pop_front()
 #define CJ(x) cout_join(x)
+#define mp make_pair
+#define fir first
+#define sec second
 
+//優先度付きキュー宣言簡易化
+template<class T> using priority_max = priority_queue<T>;
+template<class T> using priority_min = priority_queue<T, vector<T>, greater<T>>;
+//値を更新しつつ、更新したらTrue,しなければFalseを返す、aが更新対象
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+//print(a,b,c)で空白区切りで出力可能、cout_join(x,y)でxをy区切りで出力,なしだとくっつく
 template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
-template<class It, class T> ll lower_idx(It f, It l, const T& x) { return lower_bound(f, l, x) - f; }
-template<class It, class T> ll upper_idx(It f, It l, const T& x) { return upper_bound(f, l, x) - f; }
-template<class... T> constexpr auto max_ll(T... a) { using CT = std::common_type_t<T...>; return std::max({static_cast<CT>(a)...}); }
-template<class... T> constexpr auto min_ll(T... a) { using CT = std::common_type_t<T...>; return std::min({static_cast<CT>(a)...}); }
-template<typename T> T sum_v(const vector<T>& v) { return accumulate(v.begin(), v.end(), T(0)); }
-template<typename T> T min_v(const vector<T>& v) { return *min_element(v.begin(), v.end()); }
-template<typename T> T max_v(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
+void print() { cout << "\n"; } template<class T, class... Args> void print(const T& a, const Args&... args) { cout << a << (sizeof...(args) ? " " : ""); print(args...); }
+//lower_idx(リスト名,値)で使える
+template<class C, class T> ll lower_idx(const C& c, const T& x) { return lower_bound(c.begin(), c.end(), x) - c.begin(); }
+template<class C, class T> ll upper_idx(const C& c, const T& x) { return upper_bound(c.begin(), c.end(), x) - c.begin(); }
+ll lower_idx0(const vector<vector<ll>>& v, ll x) { return lower_bound(v.begin(), v.end(), x, [](const vector<ll>& a, ll val) { return a[0] < val; }) - v.begin(); }
+ll upper_idx0(const vector<vector<ll>>& v, ll x) { return lower_bound(v.begin(), v.end(), x, [](ll val, const vector<ll>& a) { return val < a[0]; }) - v.begin(); }
+//YES(条件)でTrueのときにYes,そうでなければNoと出力、ifel(条件,a,b)でTrueのときにa,そうでなければbと出力
+template<class T, class U> auto ifel(bool cond, T t, U f) { return cond ? t : f; }
+void YES(bool cond) { print(cond ? "Yes" : "No"); }
+// MAX / MIN / SUM (vector & 可変長引数 対応版)
+template<typename T> T MAX(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
+template<class... Args> constexpr auto MAX(Args... args) { return std::max({args...}); }
+template<typename T> T MIN(const vector<T>& v) { return *min_element(v.begin(), v.end()); }
+template<class... Args> constexpr auto MIN(Args... args) { return std::min({args...}); }
+template<typename T> T SUM(const vector<T>& v) { return accumulate(v.begin(), v.end(), T(0)); }
+template<class... Args> constexpr auto SUM(Args... args) { return (args + ...); }
+//py_at(リスト名,idx)でidx番目の値を返す、負の値にも対応
 template<typename T> typename T::value_type& py_at(T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
 template<typename T> const typename T::value_type& py_at(const T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
+//bit(i,j)でiについて2^jのビットが立っているかをTrueFalseで返す
 constexpr bool bit(long long i, long long j) { return (i >> j) & 1; }
 
 // --- 便利テクニック（多次元配列・座圧） ---
@@ -55,17 +77,18 @@ template<class T> T vvvc(T v) { return v; }
 template<class T, class... A> auto vvvc(ll n, T v, A... a) { return vector(n, vvvc(v, a...)); }
 template<class S> void mkuni(S& v) { sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); }
 
-// --- 数学系 ---
+//ipow(底,指数)で(底^指数)、modpow(底,指数,mod)で(底^指数)%mod、modinv(底,mod)で逆元
 constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }
 constexpr ll modpow(ll b, ll e, ll m) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
 constexpr ll modinv(ll b, ll m) { return modpow(b, m - 2, m); }
-template<typename T> T gcd_v(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
-template<typename T> T lcm_v(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 
-// --- ライブラリ領域 ---
+// GCD / LCM (vector & 可変長引数 対応版)
+template<typename T> T GCD(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
+template<class T, class... Args> constexpr T GCD(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::gcd(a, GCD(args...)); }
+template<typename T> T LCM(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
+template<class T, class... Args> constexpr T LCM(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::lcm(a, LCM(args...)); }
 
-
-// --- デバッグ & 定数 ---
+// --- デバッグ ---
 #ifdef LOCAL
 #define dmp(...) dmpr(cerr, __LINE__, ##__VA_ARGS__)
 #else
@@ -75,12 +98,17 @@ template<class t, class u> ostream& operator<<(ostream& os, const pair<t, u>& p)
 void dmpr(ostream& os, ll l) { os << endl; }
 template<class T, class... A> void dmpr(ostream& os, ll l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
 
-const vc<ll> dx = {1, 0, -1, 0};
-const vc<ll> dy = {0, 1, 0, -1};
+// --- 定数 ---
+const vc<ll> dx = {1,0,-1,0,1,-1,-1,1};const vc<ll> dy = {0,1,0,-1,1,-1,1,-1};//前4つで4近傍、8つで8近傍
 const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
+//ll mod=998244353
+//ll mod=1000000007
+
 
 int main() {
+  
+  
   
   
   

@@ -61,21 +61,21 @@ template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; }
 //print(a,b,c)で空白区切りで出力可能、cout_join(x,y)でxをy区切りで出力,なしだとくっつく
 template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
 void print() { cout << "\n"; } template<class T, class... Args> void print(const T& a, const Args&... args) { cout << a << (sizeof...(args) ? " " : ""); print(args...); }
-//lower_idx(リスト名,値)で使える
+// lower_idx(リスト名,値)で使える
 template<class C, class T> ll lower_idx(const C& c, const T& x) { return lower_bound(c.begin(), c.end(), x) - c.begin(); }
 template<class C, class T> ll upper_idx(const C& c, const T& x) { return upper_bound(c.begin(), c.end(), x) - c.begin(); }
-ll lower_idx0(const vector<vector<ll>>& v, ll x) { return lower_bound(v.begin(), v.end(), x, [](const vector<ll>& a, ll val) { return a[0] < val; }) - v.begin(); }
-ll upper_idx0(const vector<vector<ll>>& v, ll x) { return lower_bound(v.begin(), v.end(), x, [](ll val, const vector<ll>& a) { return val < a[0]; }) - v.begin(); }
+template<class C, class T> ll lower_idx0(const C& v, const T& x) { return lower_bound(v.begin(), v.end(), x, [](const auto& a, const auto& val) { return a[0] < val; }) - v.begin(); }
+template<class C, class T> ll upper_idx0(const C& v, const T& x) { return upper_bound(v.begin(), v.end(), x, [](const auto& val, const auto& a) { return val < a[0]; }) - v.begin(); }
 //YES(条件)でTrueのときにYes,そうでなければNoと出力、ifel(条件,a,b)でTrueのときにa,そうでなければbと出力
 template<class T, class U> auto ifel(bool cond, T t, U f) { return cond ? t : f; }
 void YES(bool cond) { print(cond ? "Yes" : "No"); }
-// MAX / MIN / SUM (vector & 可変長引数 対応版)
+// MAX / MIN / SUM (vector & 可変長引数 対応版 / bigint対応)
 template<typename T> T MAX(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
-template<class... Args> constexpr auto MAX(Args... args) { return std::max({args...}); }
+template<class T, class... Args> auto MAX(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else { auto b = MAX(args...); return (a > b ? a : b); } }
 template<typename T> T MIN(const vector<T>& v) { return *min_element(v.begin(), v.end()); }
-template<class... Args> constexpr auto MIN(Args... args) { return std::min({args...}); }
-template<typename T> T SUM(const vector<T>& v) { return accumulate(v.begin(), v.end(), T(0)); }
-template<class... Args> constexpr auto SUM(Args... args) { return (args + ...); }
+template<class T, class... Args> auto MIN(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else { auto b = MIN(args...); return (a < b ? a : b); } }
+template<typename T> T SUM(const vector<T>& v) { T s = 0; for (const auto& x : v) s += x; return s; }
+template<class... Args> auto SUM(Args... args) { return (args + ...); }
 //py_at(リスト名,idx)でidx番目の値を返す、負の値にも対応
 template<typename T> typename T::value_type& py_at(T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
 template<typename T> const typename T::value_type& py_at(const T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
@@ -88,15 +88,15 @@ template<class T, class... A> auto vvvc(ll n, T v, A... a) { return vector(n, vv
 template<class S> void mkuni(S& v) { sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); }
 
 //ipow(底,指数)で(底^指数)、modpow(底,指数,mod)で(底^指数)%mod、modinv(底,mod)で逆元
-constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r *= b; b *= b; e >>= 1; } return r; }
+constexpr ll ipow(ll b, ll e) { ll r = 1; while (e > 0) { if (e & 1) r = (ll)((__int128)r * b); b = (ll)((__int128)b * b); e >>= 1; } return r; }
 constexpr ll modpow(ll b, ll e, ll m) { b %= m; if (b < 0) b += m; ll r = 1; while (e > 0) { if (e & 1) r = (__int128)r * b % m; b = (__int128)b * b % m; e >>= 1; } return r; }
 constexpr ll modinv(ll b, ll m) { return modpow(b, m - 2, m); }
 
-// GCD / LCM (vector & 可変長引数 対応版)
+// GCD / LCM (vector & 可変長引数 対応版 / bigint対応)
 template<typename T> T GCD(const vector<T>& v) { T r = 0; for (auto x : v) r = std::gcd(r, x); return r; }
-template<class T, class... Args> constexpr T GCD(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::gcd(a, GCD(args...)); }
+template<class T, class... Args> auto GCD(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::gcd(a, GCD(args...)); }
 template<typename T> T LCM(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
-template<class T, class... Args> constexpr T LCM(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::lcm(a, LCM(args...)); }
+template<class T, class... Args> auto LCM(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::lcm(a, LCM(args...)); }
 
 // --- デバッグ ---
 #ifdef LOCAL

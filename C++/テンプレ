@@ -28,9 +28,19 @@ using pll = pair<ll, ll>; using tll = tuple<ll, ll, ll>;
 #define ALL(x) (x).begin(), (x).end()
 #define rALL(x) (x).rbegin(), (x).rend()
 
-// --- 入出力（vectorのcin/cout自動化） ---
+// 入出力（vectorのcin/cout自動化）,LL(x,y)で型宣言(LL,STR)と入力の受け取りが可能
 template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
 template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
+inline void scan() {}
+template<class Head, class... Tail> inline void scan(Head& head, Tail&... tail) { std::cin >> head; scan(tail...); }
+#define LL(...) ll __VA_ARGS__; scan(__VA_ARGS__)
+#define STR(...) str __VA_ARGS__; scan(__VA_ARGS__)
+
+// string,charとint,llを双方から一方へ変更可能
+inline int si(char c) { return c - '0'; } inline int si(const str& s) { return stoi(s); }
+inline ll cll(char c) { return c - '0'; } inline ll cll(const str& s) { return stoll(s); }
+inline char sc(ll n) { return '0' + n; } inline char sc(const str& s) { return s[0]; }
+inline str ss(ll n) { return to_string(n); } inline str ss(char c) { return str(1, c); }
 
 // --- 便利マクロ・関数 ---
 #define Yes cout << "Yes\n"

@@ -15,6 +15,10 @@ def I(): return int(input())
 def L(): return list(map(int,input().split()))
 def M(): return map(int,input().split())
 def LL(n): return [L() for _ in range(n)]
+def I1(): return int(input()) - 1
+def L1(): return [int(x) - 1 for x in input().split()]
+def M1(): return map(lambda x: int(x) - 1, input().split())
+def LL1(n): return [L1() for _ in range(n)]
 def S(): return list(input())
 def SL(): return SortedList()
 def SS(): return SortedSet()

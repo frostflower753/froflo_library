@@ -16,5 +16,5 @@ def combi(n,r,kai,MOD):
       #res%=MOD
     #res*=pow(kai[r],-1,MOD)
     #return res
-　#基本的にn!/((n-r)!*r!)で求める
+  #基本的にn!/((n-r)!*r!)で求める
   return (kai[n]*pow(kai[n-r],-1,MOD)*pow(kai[r],-1,MOD))%MOD

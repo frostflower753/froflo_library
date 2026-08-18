@@ -10,6 +10,7 @@ def make_kai(n, MOD):
   #2つ返ってくる
   return kai, inv
 # nCr
+#重複組合せは(n+r-1)C(r)をしよう！
 def combi(n, r, kai, inv, MOD):
   if n < r or r < 0 or n < 0:
     return 0

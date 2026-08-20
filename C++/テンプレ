@@ -53,7 +53,7 @@ inline str ss(ll n) { return to_string(n); } inline str ss(char c) { return str(
 // --- 便利マクロ・関数 ---
 #define Yes cout << "Yes\n"
 #define No cout << "No\n"
-#define pb(x) push_back(x)
+#define pb push_back
 #define pf() pop_front()
 #define CJ cout_join
 #define mp make_pair
@@ -118,5 +118,14 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }

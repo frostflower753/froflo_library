@@ -2,14 +2,15 @@
 // lower_bound:「x以上」 / upper_bound:「x超過」
 #include <bits/stdc++.h>
 #include <atcoder/all>
-
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 // --- 多倍長（Boost）: 超巨大整数が必要な時だけコメントアウトを解除 ---
 // #include <boost/multiprecision/cpp_int.hpp>
 // #include <boost/multiprecision/cpp_dec_float.hpp>
 // using bigint = boost::multiprecision::cpp_int;
 // using bigfloat = boost::multiprecision::cpp_dec_float_50;
 
-using namespace std; using namespace atcoder;
+using namespace std; using namespace atcoder;using namespace __gnu_pbds;
 struct FastIO { FastIO() { cin.tie(nullptr); ios::sync_with_stdio(false); cout << fixed << setprecision(15); } } fast_io;
 
 // --- 型定義 ---
@@ -101,7 +102,70 @@ template<typename T> T GCD(const vector<T>& v) { T r = 0; for (auto x : v) r = s
 template<class T, class... Args> auto GCD(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::gcd(a, GCD(args...)); }
 template<typename T> T LCM(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 template<class T, class... Args> auto LCM(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::lcm(a, LCM(args...)); }
+template <class T>
+struct SortedList {
+    tree<pair<T, int>, null_type, less<pair<T, int>>, rb_tree_tag, tree_order_statistics_node_update> st;
+    int id = 0;
 
+    void insert(T x) { st.insert({x, id++}); }
+    void erase(T x) {
+        auto it = st.lower_bound({x, 0});
+        if (it != st.end() && it->first == x) st.erase(it);
+    }
+    T operator[](int k) const { return st.find_by_order(k)->first; }
+    int index(T x) const { return st.order_of_key({x, 0}); }
+    int size() const { return st.size(); }
+};
+template <class T>
+struct TreapVector {
+    struct Node {
+        T val; int pri, cnt; bool rev; Node *l, *r;
+        Node(T v) : val(v), pri(rand()), cnt(1), rev(0), l(0), r(0) {}
+    } *root = 0;
+
+    int cnt(Node* t) { return t ? t->cnt : 0; }
+    void upd(Node* t) { if (t) t->cnt = 1 + cnt(t->l) + cnt(t->r); }
+    void push(Node* t) {
+        if (t && t->rev) {
+            swap(t->l, t->r);
+            if (t->l) t->l->rev ^= 1;
+            if (t->r) t->r->rev ^= 1;
+            t->rev = 0;
+        }
+    }
+    void split(Node* t, int k, Node*& l, Node*& r) {
+        if (!t) return void(l = r = 0);
+        push(t);
+        if (k <= cnt(t->l)) split(t->l, k, l, t->l), r = t;
+        else split(t->r, k - cnt(t->l) - 1, t->r, r), l = t;
+        upd(t);
+    }
+    void merge(Node*& t, Node* l, Node* r) {
+        push(l); push(r);
+        if (!l || !r) t = l ? l : r;
+        else if (l->pri > r->pri) merge(l->r, l->r, r), t = l;
+        else merge(r->l, l, r->l), t = r;
+        upd(t);
+    }
+
+    void insert(int k, T val) { Node *l, *r; split(root, k, l, r); merge(l, l, new Node(val)); merge(root, l, r); }
+    void erase(int k) { Node *l, *m, *r; split(root, k + 1, l, r); split(l, k, l, m); merge(root, l, r); delete m; }
+    void reverse(int L, int R) {
+        if (L >= R) return;
+        Node *a, *b, *c; split(root, R + 1, b, c); split(b, L, a, b);
+        if (b) b->rev ^= 1;
+        merge(b, a, b); merge(root, b, c);
+    }
+    T operator[](int k) {
+        for (Node* t = root; t; ) {
+            push(t); int c = cnt(t->l);
+            if (k == c) return t->val;
+            t = (k < c) ? t->l : (k -= c + 1, t->r);
+        }
+        return T();
+    }
+    int size() { return cnt(root); }
+};
 // --- デバッグ ---
 #ifdef LOCAL
 #define dmp(...) dmpr(cerr, __LINE__, ##__VA_ARGS__)

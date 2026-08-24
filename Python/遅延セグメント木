@@ -1,3 +1,4 @@
+#https://github.com/frostflower753/froflo_library/edit/main/Python/%E9%81%85%E5%BB%B6%E3%82%BB%E3%82%B0%E3%83%A1%E3%83%B3%E3%83%88%E6%9C%A8
 # ----- パターンA：【区間加算】＋【区間和取得】 -----
 #seg_iv = 0  # [値の初期値, 長さの初期値]
 #lazy_iv = 0

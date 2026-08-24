@@ -1,3 +1,4 @@
+#https://github.com/frostflower753/froflo_library/edit/main/C%2B%2B/N%E6%AC%A1%E5%85%83%E7%B4%AF%E7%A9%8D%E5%92%8C
 // --- N次元累積和（2次元〜高次元対応） ---
 template<typename T = long long>
 struct NDimCumSum {

@@ -1,0 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+using long long=ll;
+using unsigned long long=ull;
+
+priority_queue<T,vector<T>,greater<T>> a;

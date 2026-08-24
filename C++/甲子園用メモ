@@ -11,3 +11,6 @@ bool:true false←小文字
 long long が9*10^18、unsigned long longが2*10^19
 1LLと書こう
 .size()は変な型で返ってくるので注意
+
+bit演算
+&でAND演算、|でOR演算、^でXOR演算、~でビットの反転(NOT演算)

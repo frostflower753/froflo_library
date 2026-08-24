@@ -1,3 +1,4 @@
+#https://github.com/frostflower753/froflo_library/edit/main/Python/Combi
 # 階乗(kai)と階乗の逆元(inv)を作る前計算関数
 def make_kai(n, MOD):
   kai = [1] * (n + 10)

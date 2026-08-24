@@ -1,3 +1,4 @@
+//https://github.com/frostflower753/froflo_library/edit/main/C%2B%2B/dijkstra
 //これをただmain関数の外にそのままコピペして普通に使えばいい
 vector<ll> dijkstra(ll n,ll v,const vector<vector<pair<ll,ll>>>& con){
   vector<ll> dist(n,INF);

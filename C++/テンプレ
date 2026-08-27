@@ -28,8 +28,8 @@ using mint = modint998244353;
 #define rep(...) OVERLOAD4(__VA_ARGS__, rep3, rep2, rep1)(__VA_ARGS__)
 
 #define rrep1(i, n) for (ll i = (ll)(n) - 1; i >= 0; i--)
-#define rrep2(i, l, r) for (ll i = (ll)(r) - 1; i >= (ll)(l); i--)
-#define rrep3(i, l, r, s) for (ll i = (ll)(r) - 1; i >= (ll)(l); i -= (ll)(s))
+#define rrep2(i, r, l) for (ll i = (ll)(r); i > (ll)(l); i--)
+#define rrep3(i, r, l, s) for (ll i = (ll)(r); i > (ll)(l); i -= (ll)(s))
 #define rrep(...) OVERLOAD4(__VA_ARGS__, rrep3, rrep2, rrep1)(__VA_ARGS__)
 
 #define ALL(x) (x).begin(), (x).end()
@@ -54,6 +54,7 @@ inline str ss(ll n) { return to_string(n); } inline str ss(char c) { return str(
 // --- 便利マクロ・関数 ---
 #define Yes cout << "Yes\n"
 #define No cout << "No\n"
+#define ret return 0
 #define pb push_back
 #define pf() pop_front()
 #define CJ cout_join
@@ -182,6 +183,10 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
+  
+  
+  
+  
   
   
   

@@ -1,0 +1,44 @@
+// --- 幾何・ベクトル便利関数 ---
+
+// 1. ベクトルの正規化 (x<0、または x==0 かつ y<0 ならば -1 を掛ける)
+template<class T>
+void normalize_vec(T& vx, T& vy) {
+    if (vx < 0 || (vx == 0 && vy < 0)) {
+        vx *= -1;
+        vy *= -1;
+    }
+}
+
+// 2. 点 (ax, ay) を 中心 (cx, cy) まわりに rad (ラジアン) 回転させた点を求める
+// (度数法 deg から渡す場合は theta * pi / 180.0 を指定)
+template<class T, class Real = double>
+pair<Real, Real> rotate_point(T cx, T cy, T ax, T ay, Real theta) {
+    Real dx = ax - cx;
+    Real dy = ay - cy;
+    Real rx = dx * cos(theta) - dy * sin(theta);
+    Real ry = dx * sin(theta) + dy * cos(theta);
+    return {cx + rx, cy + ry};
+}
+
+// 3. 2つの線分 (a1-a2) と (b1-b2) がクロス（端点の共有・重なり含む交差）するか判定
+template<class T>
+bool intersect_segment(T a1x, T a1y, T a2x, T a2y, T b1x, T b1y, T b2x, T b2y) {
+    auto ccw = [](T ax, T ay, T bx, T by, T cx, T cy) -> int {
+        T cross = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
+        if (cross > 0) return 1;   // 反時計回り
+        if (cross < 0) return -1;  // 時計回り
+        T dot = (bx - ax) * (cx - ax) + (by - ay) * (cy - ay);
+        if (dot < 0) return 2;     // c-a-b (一直線上・aの外側)
+        T sq_ab = (bx - ax) * (bx - ax) + (by - ay) * (by - ay);
+        T sq_ac = (cx - ax) * (cx - ax) + (cy - ay) * (cy - ay);
+        if (sq_ab < sq_ac) return -2; // a-b-c (一直線上・bの外側)
+        return 0;                  // c は線分 ab 上
+    };
+
+    int c1 = ccw(a1x, a1y, a2x, a2y, b1x, b1y);
+    int c2 = ccw(a1x, a1y, a2x, a2y, b2x, b2y);
+    int c3 = ccw(b1x, b1y, b2x, b2y, a1x, a1y);
+    int c4 = ccw(b1x, b1y, b2x, b2y, a2x, a2y);
+
+    return (c1 * c2 <= 0 && c3 * c4 <= 0);
+}

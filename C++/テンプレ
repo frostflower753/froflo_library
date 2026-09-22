@@ -56,9 +56,9 @@ inline str ss(ll n) { return to_string(n); } inline str ss(char c) { return str(
 #define Yes cout << "Yes\n"
 #define No cout << "No\n"
 #define ret return 0
+#define nl "\n"
 #define pb push_back
 #define pf() pop_front()
-#define CJ cout_join
 #define mp make_pair
 #define fir first
 #define sec second
@@ -75,16 +75,13 @@ constexpr bool IN(T1 l, T2 x, T3 r) { return l <= x && x < r; }
 template<class T1, class T2, class T3, class T4>
 constexpr bool IN(T1 h, T2 y, T3 w, T4 x) { return 0 <= y && y < h && 0 <= x && x < w; }
 
-template<typename T> void cout_join(const vector<T>& v, string sep = "") { rep(i, v.size()) cout << v[i] << (i + 1 == (ll)v.size() ? "" : sep); cout << "\n"; }
-void print() { cout << "\n"; } template<class T, class... Args> void print(const T& a, const Args&... args) { cout << a << (sizeof...(args) ? " " : ""); print(args...); }
-
 template<class C, class T> ll lower_idx(const C& c, const T& x) { return lower_bound(c.begin(), c.end(), x) - c.begin(); }
 template<class C, class T> ll upper_idx(const C& c, const T& x) { return upper_bound(c.begin(), c.end(), x) - c.begin(); }
 template<class C, class T> ll lower_idx0(const C& v, const T& x) { return lower_bound(v.begin(), v.end(), x, [](const auto& a, const auto& val) { return a[0] < val; }) - v.begin(); }
 template<class C, class T> ll upper_idx0(const C& v, const T& x) { return upper_bound(v.begin(), v.end(), x, [](const auto& val, const auto& a) { return val < a[0]; }) - v.begin(); }
 
 template<class T, class U> auto ifel(bool cond, T t, U f) { return cond ? t : f; }
-void YES(bool cond) { print(cond ? "Yes" : "No"); }
+void YES(bool cond) { cout << (cond ? "Yes\n" : "No\n"); }
 
 template<typename T> T MAX(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
 template<class T, class... Args> auto MAX(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else { auto b = MAX(args...); return (a > b ? a : b); } }
@@ -190,15 +187,6 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   

@@ -36,11 +36,33 @@ using mint = modint998244353;
 #define ALL(x) (x).begin(), (x).end()
 #define rALL(x) (x).rbegin(), (x).rend()
 
-// --- 入出力 (mint / vector対応) ---
+// --- 入出力 (mint / コンテナ対応) ---
 template<int m> std::istream &operator>>(std::istream &is, static_modint<m> &v) { long long x; is >> x; v = x; return is; }
 template<int m> std::ostream &operator<<(std::ostream &os, const static_modint<m> &v) { return os << v.val(); }
+
+// pair の出力
+template<class T, class U> std::ostream& operator<<(std::ostream& os, const std::pair<T, U>& p) { return os << "{" << p.first << ", " << p.second << "}"; }
+
+// vector / deque の出力 (空白区切り)
 template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
 template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
+template<typename T> std::ostream &operator<<(std::ostream &os, const std::deque<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
+
+// set / multiset / unordered_set の出力 ({a, b, c} 形式)
+template<typename T> std::ostream &operator<<(std::ostream &os, const std::set<T> &st) { os << "{"; auto it = st.begin(); while (it != st.end()) { os << *it; if (++it != st.end()) os << ", "; } return os << "}"; }
+template<typename T> std::ostream &operator<<(std::ostream &os, const std::multiset<T> &st) { os << "{"; auto it = st.begin(); while (it != st.end()) { os << *it; if (++it != st.end()) os << ", "; } return os << "}"; }
+template<typename T> std::ostream &operator<<(std::ostream &os, const std::unordered_set<T> &st) { os << "{"; auto it = st.begin(); while (it != st.end()) { os << *it; if (++it != st.end()) os << ", "; } return os << "}"; }
+
+// map / unordered_map の出力 ({k1: v1, k2: v2} 形式)
+template<typename K, typename V> std::ostream &operator<<(std::ostream &os, const std::map<K, V> &mp) { os << "{"; auto it = mp.begin(); while (it != mp.end()) { os << it->first << ": " << it->second; if (++it != mp.end()) os << ", "; } return os << "}"; }
+template<typename K, typename V> std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &mp) { os << "{"; auto it = mp.begin(); while (it != mp.end()) { os << it->first << ": " << it->second; if (++it != mp.end()) os << ", "; } return os << "}"; }
+
+// priority_queue の出力（値渡しでコピーして取り出しながら出力）
+template<typename T, typename Container, typename Compare>
+std::ostream &operator<<(std::ostream &os, std::priority_queue<T, Container, Compare> pq) {
+    os << "["; while (!pq.empty()) { os << pq.top(); pq.pop(); if (!pq.empty()) os << ", "; } return os << "]";
+}
+
 inline void scan() {}
 template<class Head, class... Tail> inline void scan(Head& head, Tail&... tail) { std::cin >> head; scan(tail...); }
 #define LL(...) ll __VA_ARGS__; scan(__VA_ARGS__)
@@ -107,6 +129,8 @@ template<typename T> T GCD(const vector<T>& v) { T r = 0; for (auto x : v) r = s
 template<class T, class... Args> auto GCD(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::gcd(a, GCD(args...)); }
 template<typename T> T LCM(const vector<T>& v) { T r = 1; for (auto x : v) r = std::lcm(r, x); return r; }
 template<class T, class... Args> auto LCM(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else return std::lcm(a, LCM(args...)); }
+
+// --- データ構造 (SortedList / TreapVector) ---
 template <class T>
 struct SortedList {
     tree<pair<T, int>, null_type, less<pair<T, int>>, rb_tree_tag, tree_order_statistics_node_update> st;
@@ -121,6 +145,7 @@ struct SortedList {
     int index(T x) const { return st.order_of_key({x, 0}); }
     int size() const { return st.size(); }
 };
+
 template <class T>
 struct TreapVector {
     struct Node {
@@ -171,13 +196,13 @@ struct TreapVector {
     }
     int size() { return cnt(root); }
 };
+
 // --- デバッグ ---
 #ifdef LOCAL
 #define dmp(...) dmpr(cerr, __LINE__, ##__VA_ARGS__)
 #else
 #define dmp(...) void(0)
 #endif
-template<class t, class u> ostream& operator<<(ostream& os, const pair<t, u>& p) { return os << "{" << p.first << "," << p.second << "}"; }
 void dmpr(ostream& os, ll l) { os << endl; }
 template<class T, class... A> void dmpr(ostream& os, ll l, const T& t, const A&... a) { if (l) os << "[L" << l << "] "; os << t << " "; dmpr(os, 0, a...); }
 
@@ -187,15 +212,5 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
 }

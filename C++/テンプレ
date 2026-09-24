@@ -97,10 +97,47 @@ constexpr bool IN(T1 l, T2 x, T3 r) { return l <= x && x < r; }
 template<class T1, class T2, class T3, class T4>
 constexpr bool IN(T1 h, T2 y, T3 w, T4 x) { return 0 <= y && y < h && 0 <= x && x < w; }
 
-template<class C, class T> ll lower_idx(const C& c, const T& x) { return lower_bound(c.begin(), c.end(), x) - c.begin(); }
-template<class C, class T> ll upper_idx(const C& c, const T& x) { return upper_bound(c.begin(), c.end(), x) - c.begin(); }
-template<class C, class T> ll lower_idx0(const C& v, const T& x) { return lower_bound(v.begin(), v.end(), x, [](const auto& a, const auto& val) { return a[0] < val; }) - v.begin(); }
-template<class C, class T> ll upper_idx0(const C& v, const T& x) { return upper_bound(v.begin(), v.end(), x, [](const auto& val, const auto& a) { return val < a[0]; }) - v.begin(); }
+// --- 全列挙ヘルパー (順列 & 組み合わせ) ---
+// n 個から k 個選んで並べる順列全列挙 (k を省略すると全要素 n! 通り)
+template <typename T>
+vc<vc<T>> permutations(vc<T> v, ll k = -1) {
+    if (k == -1) k = v.size();
+    sort(ALL(v));
+    vc<vc<T>> res;
+    vc<bool> used(v.size(), false);
+    vc<T> buf;
+    auto dfs = [&](auto self) -> void {
+        if ((ll)buf.size() == k) { res.pb(buf); return; }
+        rep(i, v.size()) {
+            if (used[i]) continue;
+            used[i] = true;
+            buf.pb(v[i]);
+            self(self);
+            buf.pop_back();
+            used[i] = false;
+        }
+    };
+    dfs(dfs);
+    return res;
+}
+
+// n 個から k 個選ぶ組み合わせ（コンビネーション）全列挙
+template <typename T>
+vc<vc<T>> combinations(vc<T> v, ll k) {
+    sort(ALL(v));
+    vc<vc<T>> res;
+    vc<T> buf;
+    auto dfs = [&](auto self, ll idx) -> void {
+        if ((ll)buf.size() == k) { res.pb(buf); return; }
+        if (idx == (ll)v.size()) return;
+        buf.pb(v[idx]);
+        self(self, idx + 1);
+        buf.pop_back();
+        self(self, idx + 1);
+    };
+    dfs(dfs, 0);
+    return res;
+}
 
 template<class T, class U> auto ifel(bool cond, T t, U f) { return cond ? t : f; }
 void YES(bool cond) { cout << (cond ? "Yes\n" : "No\n"); }

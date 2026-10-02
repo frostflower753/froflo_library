@@ -1,0 +1,46 @@
+// --- 重み付き Union-Find (Weighted DSU) ---
+template<typename T = ll>
+struct WeightedDSU {
+    int n;
+    vc<int> parent;
+    vc<T> diff_weight;
+
+    WeightedDSU(int n = 0) : n(n), parent(n), diff_weight(n, 0) {
+        rep(i, n) parent[i] = i;
+    }
+
+    // 代表 (根) を求める（同時にポテンシャルの経路圧縮）
+    int leader(int x) {
+        if (parent[x] == x) return x;
+        int r = leader(parent[x]);
+        diff_weight[x] += diff_weight[parent[x]];
+        return parent[x] = r;
+    }
+
+    // 根からの相対位置 (ポテンシャル) を取得
+    T weight(int x) {
+        leader(x);
+        return diff_weight[x];
+    }
+
+    // x と y が同じグループか判定
+    bool same(int x, int y) {
+        return leader(x) == leader(y);
+    }
+
+    // weight(y) - weight(x) の差を取得 (same(x, y) == true であること)
+    T diff(int x, int y) {
+        return weight(y) - weight(x);
+    }
+
+    // weight(y) - weight(x) = w となるように統合
+    bool merge(int x, int y, T w) {
+        w += weight(x) - weight(y);
+        int rx = leader(x), ry = leader(y);
+        if (rx == ry) return false;
+
+        parent[ry] = rx;
+        diff_weight[ry] = w;
+        return true;
+    }
+};

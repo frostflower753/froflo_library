@@ -1,0 +1,104 @@
+//
+// --- データ構造 (Trie) ---
+/**
+ * @brief 汎用トライ木（文字列・配列対応）
+ * @tparam T 要素の型（char, int, ll など）
+ */
+template <typename T = char>
+struct Trie {
+    struct Node {
+        map<T, int> next; // 子ノードのインデックス (大きな値の要素も動的に管理)
+        int word_count = 0; // このノードで終わる列の数
+        int pass_count = 0; // このノードを通過する列の数
+    };
+
+    vc<Node> nodes;
+
+    Trie() {
+        nodes.emplace_back(); // ルートノード (index: 0)
+    }
+
+    /**
+     * @brief 列 (string や vc<T>) を挿入
+     */
+    template <typename Container>
+    void insert(const Container& seq) {
+        int node_id = 0;
+        nodes[node_id].pass_count++;
+        for (const auto& elem : seq) {
+            if (!nodes[node_id].next.count(elem)) {
+                nodes[node_id].next[elem] = nodes.size();
+                nodes.emplace_back();
+            }
+            node_id = nodes[node_id].next[elem];
+            nodes[node_id].pass_count++;
+        }
+        nodes[node_id].word_count++;
+    }
+
+    /**
+     * @brief 完全一致する列が存在するか判定
+     */
+    template <typename Container>
+    bool search(const Container& seq) const {
+        int node_id = find_node(seq);
+        return node_id != -1 && nodes[node_id].word_count > 0;
+    }
+
+    /**
+     * @brief 指定した接頭辞で始まる列が存在するか判定
+     */
+    template <typename Container>
+    bool starts_with(const Container& seq) const {
+        return find_node(seq) != -1;
+    }
+
+    /**
+     * @brief 指定した接頭辞を持つ列の総数を取得
+     */
+    template <typename Container>
+    int count_prefix(const Container& seq) const {
+        int node_id = find_node(seq);
+        return node_id == -1 ? 0 : nodes[node_id].pass_count;
+    }
+
+    /**
+     * @brief 列を 1 つ削除する（存在する場合のみ）
+     */
+    template <typename Container>
+    bool erase(const Container& seq) {
+        if (!search(seq)) return false;
+        int node_id = 0;
+        nodes[node_id].pass_count--;
+        for (const auto& elem : seq) {
+            node_id = nodes[node_id].next[elem];
+            nodes[node_id].pass_count--;
+        }
+        nodes[node_id].word_count--;
+        return true;
+    }
+
+    /**
+     * @brief 登録されている全ノード数を取得
+     */
+    int size() const {
+        return nodes.size();
+    }
+
+    void clear() {
+        nodes.clear();
+        nodes.emplace_back();
+    }
+
+private:
+    template <typename Container>
+    int find_node(const Container& seq) const {
+        int node_id = 0;
+        for (const auto& elem : seq) {
+            auto it = nodes[node_id].next.find(elem);
+            if (it == nodes[node_id].next.end()) return -1;
+            node_id = it->second;
+        }
+        return node_id;
+    }
+};

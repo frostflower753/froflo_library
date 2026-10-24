@@ -1,4 +1,4 @@
-//https://github.com/frostflower753/froflo_library/
+//https://github.com/frostflower753/froflo_library
 // GCD: 最大公約数 / LCM: 最小公倍数
 // lower_bound:「x以上」 / upper_bound:「x超過」
 #include <bits/stdc++.h>

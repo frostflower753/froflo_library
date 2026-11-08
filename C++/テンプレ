@@ -1,4 +1,4 @@
-//https://github.com/frostflower753/froflo_library
+//https://github.com/frostflower753/froflo_library/
 // GCD: 最大公約数 / LCM: 最小公倍数
 // lower_bound:「x以上」 / upper_bound:「x超過」
 #include <bits/stdc++.h>
@@ -43,10 +43,13 @@ template<int m> std::ostream &operator<<(std::ostream &os, const static_modint<m
 // pair の出力
 template<class T, class U> std::ostream& operator<<(std::ostream& os, const std::pair<T, U>& p) { return os << "{" << p.first << ", " << p.second << "}"; }
 
-// vector / deque の出力 (空白区切り)
+// vector / deque / array の出力 (空白区切り)
 template<typename T> std::istream &operator>>(std::istream &is, vc<T> &v) { for (T &in : v) is >> in; return is; }
 template<typename T> std::ostream &operator<<(std::ostream &os, const vc<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
 template<typename T> std::ostream &operator<<(std::ostream &os, const std::deque<T> &v) { rep(i, v.size()) os << v[i] << (i + 1 == (ll)v.size() ? "" : " "); return os; }
+
+template<typename T, size_t N> std::istream &operator>>(std::istream &is, std::array<T, N> &arr) { for (T &in : arr) is >> in; return is; }
+template<typename T, size_t N> std::ostream &operator<<(std::ostream &os, const std::array<T, N> &arr) { rep(i, N) os << arr[i] << (i + 1 == (ll)N ? "" : " "); return os; }
 
 // set / multiset / unordered_set の出力 ({a, b, c} 形式)
 template<typename T> std::ostream &operator<<(std::ostream &os, const std::set<T> &st) { os << "{"; auto it = st.begin(); while (it != st.end()) { os << *it; if (++it != st.end()) os << ", "; } return os << "}"; }
@@ -143,10 +146,15 @@ template<class T, class U> auto ifel(bool cond, T t, U f) { return cond ? t : f;
 void YES(bool cond) { cout << (cond ? "Yes\n" : "No\n"); }
 
 template<typename T> T MAX(const vector<T>& v) { return *max_element(v.begin(), v.end()); }
+template<typename T, size_t N> T MAX(const std::array<T, N>& arr) { return *max_element(arr.begin(), arr.end()); }
 template<class T, class... Args> auto MAX(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else { auto b = MAX(args...); return (a > b ? a : b); } }
+
 template<typename T> T MIN(const vector<T>& v) { return *min_element(v.begin(), v.end()); }
+template<typename T, size_t N> T MIN(const std::array<T, N>& arr) { return *min_element(arr.begin(), arr.end()); }
 template<class T, class... Args> auto MIN(T a, Args... args) { if constexpr (sizeof...(args) == 0) return a; else { auto b = MIN(args...); return (a < b ? a : b); } }
+
 template<typename T> T SUM(const vector<T>& v) { T s = 0; for (const auto& x : v) s += x; return s; }
+template<typename T, size_t N> T SUM(const std::array<T, N>& arr) { T s = 0; for (const auto& x : arr) s += x; return s; }
 template<class... Args> auto SUM(Args... args) { return (args + ...); }
 
 template<typename T> typename T::value_type& py_at(T& v, long long i) { long long n = v.size(); if (n == 0 || i < -n || i >= n) { std::cerr << "[py_at Error] Out of range! size: " << n << ", index: " << i << std::endl; return v.at(i); } return v[(i % n + n) % n]; }
@@ -249,6 +257,10 @@ const double pi = 3.14159265358979323846264338;
 constexpr ll INF = 2e18;
 
 int main() {
+  
+  
+  
+  
   
   
   

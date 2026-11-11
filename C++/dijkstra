@@ -1,23 +1,15 @@
-//https://github.com/frostflower753/froflo_library/edit/main/C%2B%2B/dijkstra
-//これをただmain関数の外にそのままコピペして普通に使えばいい
-vector<ll> dijkstra(ll n,ll v,const vector<vector<pair<ll,ll>>>& con){
-  vector<ll> dist(n,INF);
-  dist[v]=0;
-  priority_queue<pair<ll,ll>,vector<pair<ll,ll>>, greater<pair<ll,ll>>> hq;
-  hq.push(make_pair(0LL,v));
-  while(hq.size()>0){
-    ll d=hq.top().first;
-    ll u=hq.top().second;
-    hq.pop();
-    if(dist[u]<d){
-      continue;
-    }
-    for(int i=0;i<con[u].size();i++){
-      ll x=d+con[u][i].second;
-      if(chmin(dist[con[u][i].first],x)){
-        hq.push(make_pair(x,con[u][i].first));
+auto dijkstra=[&](ll v){
+    vector<ll> res(n,INF);dist[v]=0;
+    priority_min<array<ll,2>> hq;hq.push({0,v});
+    while(hq.size()>0){
+      auto [c,now]=hq.top();hq.pop();
+      if(dist[now]<c){
+        continue;
+      }
+      for(auto [nex,cost]:con[now]){
+        if(chmin(dist[nex],dist[now]+cost)){
+          hq.push({dist[nex],nex});
+        }
       }
     }
   }
-  return dist;
-}

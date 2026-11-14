@@ -1,5 +1,5 @@
 auto dijkstra=[&](ll v){
-    vector<ll> res(n,INF);dist[v]=0;
+    vector<ll> dist(n,INF);dist[v]=0;
     priority_min<array<ll,2>> hq;hq.push({0,v});
     while(hq.size()>0){
       auto [c,now]=hq.top();hq.pop();

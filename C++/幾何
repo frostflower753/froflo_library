@@ -42,3 +42,12 @@ bool intersect_segment(T a1x, T a1y, T a2x, T a2y, T b1x, T b1y, T b2x, T b2y) {
 
     return (c1 * c2 <= 0 && c3 * c4 <= 0);
 }
+
+// P2 を頂点とする ∠P1 P2 P3 を求める（ラジアン: 0 ~ pi）
+ld get_angle(ld x1, ld y1, ld x2, ld y2, ld x3, ld y3) {
+    ld ax = x1 - x2, ay = y1 - y2;
+    ld bx = x3 - x2, by = y3 - y2;
+    ld dot = ax * bx + ay * by;          // 内積
+    ld cross = abs(ax * by - ay * bx);   // 外積の大きさ
+    return atan2(cross, dot);            // ラジアンで返す
+}

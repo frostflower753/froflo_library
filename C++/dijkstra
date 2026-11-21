@@ -1,4 +1,4 @@
-auto dijkstra=[&](ll n,ll v,ll fisrt_cost){
+auto dijkstra=[&](ll n,ll v){
     vector<ll> dist(n,INF);dist[v]=0;
     priority_min<array<ll,2>> hq;hq.push({0,v});
     while(hq.size()>0){

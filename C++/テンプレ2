@@ -1,0 +1,36 @@
+//https://github.com/frostflower753/froflo_library/
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long;
+using str=string;
+#define OVERLOAD4(_1, _2, _3, _4, NAME, ...) NAME
+#define rep1(i, n) for (ll i = 0; i < (ll)(n); i++)
+#define rep2(i, l, r) for (ll i = (ll)(l); i < (ll)(r); i++)
+#define rep3(i, l, r, s) for (ll i = (ll)(l); i < (ll)(r); i += (ll)(s))
+#define rep(...) OVERLOAD4(__VA_ARGS__, rep3, rep2, rep1)(__VA_ARGS__)
+
+#define rrep1(i, n) for (ll i = (ll)(n) - 1; i >= 0; i--)
+#define rrep2(i, r, l) for (ll i = (ll)(r); i > (ll)(l); i--)
+#define rrep3(i, r, l, s) for (ll i = (ll)(r); i > (ll)(l); i -= (ll)(s))
+#define rrep(...) OVERLOAD4(__VA_ARGS__, rrep3, rrep2, rrep1)(__VA_ARGS__)
+
+#define ALL(x) (x).begin(), (x).end()
+#define rALL(x) (x).rbegin(), (x).rend()
+
+#define Yes cout << "Yes\n"
+#define No cout << "No\n"
+#define ret return 0
+#define nl "\n"
+#define pb push_back
+#define pf() pop_front()
+#define mp make_pair
+#define fir first
+#define sec second
+
+const vc<ll> dx = {1,0,-1,0,1,-1,-1,1}; const vc<ll> dy = {0,1,0,-1,1,-1,1,-1};
+const double pi = 3.14159265358979323846264338;
+constexpr ll INF = 2e18;
+
+int main(){
+    
+}
